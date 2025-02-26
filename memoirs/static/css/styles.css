@@ -1,0 +1,36 @@
+
+.selected {color: #0059b2; }
+
+.header {
+	background: #3F4137;
+	height: 60px;
+
+
+}
+.clear {clear: both;}
+
+.logo {
+	background: url('../images/logo.png') no-repeat 10px 5px;
+	width: 70px;
+	height: 60px;
+}
+
+button{
+    background-color: rgba(0,0,0,0);
+}
+
+.responsive-text {
+       font-size: 1.5rem; /* Начальный размер текста */
+    }
+
+@media (max-width: 768px) {
+   .responsive-text {
+       font-size: 1rem; /* Уменьшаем размер текста для планшетов и мобильных устройств */
+   }
+ }
+
+@media (max-width: 576px) {
+   .responsive-text {
+     font-size: 0.5rem; /* Уменьшаем размер текста для мобильных устройств */
+     }
+ }
