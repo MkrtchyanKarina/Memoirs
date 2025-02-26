@@ -11,12 +11,29 @@ menu = [
     {'title': "Войти", 'url_name': 'login'},
 ]
 
+categories_db = [
+    {'id': 1, 'name': 'Ваши статьи'},
+    {'id': 2, 'name': 'Новые статьи'},
+    {'id': 3, 'name': 'Популярные статьи'},
+]
 
+
+def show_category(request, cat_id):
+    data = {
+        'title': 'Отображение по рубрикам',
+        'menu': menu,
+        'posts': get_list_or_404(Post, is_published=1),
+        'cat_selected': cat_id,
+
+    }
+    return render(request, 'post/index.html', context=data)
 
 def index(request):
     data = {
         'title': 'home page',
         'menu': menu,
+        'posts': get_list_or_404(Post, is_published=1),
+        'cat_selected': 0,
         }
     return render(request, 'post/index.html', context=data)
 
