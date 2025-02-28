@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import get_list_or_404, render
+from django.http import HttpResponse, HttpResponseNotFound
+from django.shortcuts import get_list_or_404, render, get_object_or_404
 from .models import Post
 
 
@@ -28,6 +28,7 @@ def show_category(request, cat_id):
     }
     return render(request, 'post/index.html', context=data)
 
+
 def index(request):
     data = {
         'title': 'home page',
@@ -39,9 +40,8 @@ def index(request):
 
 
 def about(request):
-    return HttpResponse("<h1>Информация о сайте</h1>")
-    # data = {'title': 'О сайте', 'menu': menu}
-    # return render(request, 'posts/about.html', context=data)
+    data = {'title': 'О сайте', 'menu': menu}
+    return render(request, 'post/about.html', context=data)
 
 
 def add_post(request):
@@ -56,3 +56,15 @@ def contact(request):
     return HttpResponse("<h1>Обратная связь</h1>")
 
 
+def show_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    data = {
+        'menu': menu,
+        'post': post,
+        'cat_selected': 2,
+    }
+    return render(request, 'post/post.html', context=data)
+
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
