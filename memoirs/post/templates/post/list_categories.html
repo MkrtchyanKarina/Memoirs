@@ -1,7 +1,8 @@
+{% load static %}
 {% for cat in categories %}
 {% if cat.id == cat_selected %}
-<li class="selected">{{ cat.name }}</li>
+<p class="selected">{{ cat.name }}</p>
 {% else %}
-<li><a href="{% url 'category' cat.id %}">{{ cat.name }}</a></li>
+<p><a class="link" href="{% url 'category' cat.id %}">{{ cat.name }}</a></p>
 {% endif %}
 {% endfor %}
