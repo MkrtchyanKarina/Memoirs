@@ -33,7 +33,8 @@ def index(request):
     data = {
         'title': 'home page',
         'menu': menu,
-        'posts': get_list_or_404(Post, is_published=1),
+        'posts': Post.published.all(),
+        # 'posts': get_list_or_404(Post, is_published=1),
         'cat_selected': 0,
         }
     return render(request, 'post/index.html', context=data)
