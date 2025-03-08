@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_list_or_404, render, get_object_or_404
-from .models import Post
+from .models import Post, Category
 
 
 menu = [
@@ -11,19 +11,15 @@ menu = [
     {'title': "Войти", 'url_name': 'login'},
 ]
 
-categories_db = [
-    {'id': 1, 'name': 'Ваши статьи'},
-    {'id': 2, 'name': 'Новые статьи'},
-    {'id': 3, 'name': 'Популярные статьи'},
-]
 
-
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Post.published.filter(cat_id=category.pk)
     data = {
-        'title': 'Отображение по рубрикам',
+        'title': f'Категория: {category.name}',
         'menu': menu,
-        'posts': get_list_or_404(Post, is_published=1),
-        'cat_selected': cat_id,
+        'posts': posts,
+        'cat_selected': category.pk,
 
     }
     return render(request, 'post/index.html', context=data)
@@ -33,7 +29,7 @@ def index(request):
     data = {
         'title': 'home page',
         'menu': menu,
-        'posts': get_list_or_404(Post, is_published=1),
+        'posts': Post.published.all(),
         'cat_selected': 0,
         }
     return render(request, 'post/index.html', context=data)
@@ -57,11 +53,11 @@ def contact(request):
 
 
 def show_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+    post = Post.published.get(pk=post_id)
     data = {
         'menu': menu,
         'post': post,
-        'cat_selected': 2,
+        'cat_selected': post.cat_id,
     }
     return render(request, 'post/post.html', context=data)
 

@@ -1,8 +1,8 @@
 {% load static %}
 {% for cat in categories %}
-{% if cat.id == cat_selected %}
-<p class="selected">{{ cat.name }}</p>
-{% else %}
-<p><a class="link" href="{% url 'category' cat.id %}">{{ cat.name }}</a></p>
-{% endif %}
+    {% if cat.id == cat_selected %}
+        <p class="selected">{{ cat.name }}</p>
+    {% else %}
+        <p><a class="link" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></p>
+    {% endif %}
 {% endfor %}

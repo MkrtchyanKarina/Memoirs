@@ -88,3 +88,29 @@ div.left_sidebar{
     text-decoration: none;
     font-weight: 800;
 }
+
+div.article-panel {
+    background: rgba(147, 112, 219, 0.2);
+    padding: 5px 10px 5px 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: #444;
+}
+
+ul.list-articles {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul.list-articles li {
+	border-bottom: 1px solid #9370DB;
+}
+
+div.article-panel p.first {
+    margin: 0;
+    float: left;
+}
+div.article-panel p.last {
+    margin: 0;
+    float: right;
+}
