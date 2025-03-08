@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_list_or_404, render, get_object_or_404
-from .models import Post
+from .models import Post, Category
 
 
 menu = [
@@ -11,42 +11,15 @@ menu = [
     {'title': "Войти", 'url_name': 'login'},
 ]
 
-categories_db = [
-    # {'id': 1, 'name': 'Новости'},
-    {'id': 2, 'name': 'Обзоры'},
-    {'id': 3, 'name': 'Тренды'},
-    {'id': 3, 'name': 'Исследования'},
-    # {'id': 3, 'name': 'Без категории'},
-    {'id': 3, 'name': 'Советы'},
-    {'id': 3, 'name': 'Интервью'},
-    {'id': 3, 'name': 'Личный опыт'},
-]
 
-"""
-    {'id': 1, 'name': 'Личный опыт'},
-    {'id': 2, 'name': 'Здоровье'},
-    Автомобили
-    {'id': 3, 'name': 'Путешествия'},
-    {'id': 4, 'name': 'Кулинария'},
-    {'id': 5, 'name': 'Технологии'},
-    {'id': 6, 'name': 'Хобби'},
-    {'id': 7, 'name': 'Искусство'},
-    {'id': 8, 'name': 'Литература'},
-    {'id': 8, 'name': 'Архитектура'},
-    {'id': 8, 'name': 'Биография'},
-    {'id': 8, 'name': 'Наука'},
-    {'id': 8, 'name': 'Кино'},
-    {'id': 9, 'name': 'Театр'},
-    {'id': 10, 'name': 'Музыка'},
-    {'id': 11, 'name': 'Мода'},
-"""
-
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Post.published.filter(cat_id=category.pk)
     data = {
-        'title': 'Отображение по рубрикам',
+        'title': f'Категория: {category.name}',
         'menu': menu,
-        'posts': get_list_or_404(Post, is_published=1),
-        'cat_selected': cat_id,
+        'posts': posts,
+        'cat_selected': category.pk,
 
     }
     return render(request, 'post/index.html', context=data)
@@ -57,7 +30,6 @@ def index(request):
         'title': 'home page',
         'menu': menu,
         'posts': Post.published.all(),
-        # 'posts': get_list_or_404(Post, is_published=1),
         'cat_selected': 0,
         }
     return render(request, 'post/index.html', context=data)
@@ -81,11 +53,11 @@ def contact(request):
 
 
 def show_post(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
+    post = Post.published.get(pk=post_id)
     data = {
         'menu': menu,
         'post': post,
-        'cat_selected': 2,
+        'cat_selected': post.cat_id,
     }
     return render(request, 'post/post.html', context=data)
 

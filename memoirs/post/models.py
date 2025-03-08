@@ -25,6 +25,7 @@ class Post(models.Model):
     cat = models.ForeignKey(
         "Category",
         on_delete=models.PROTECT,
+        related_name="posts"
     )  # cat - это полноценная запись из таблицы/ объект класса Category! А cat_id - это только поле - идентификатор записи
 
     objects = models.Manager()
@@ -44,8 +45,12 @@ class Post(models.Model):
 
 
 class Category(models.Model):
+    objects = models.Manager()
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_slug': self.slug})
 
     def __str__(self):
         return self.name
