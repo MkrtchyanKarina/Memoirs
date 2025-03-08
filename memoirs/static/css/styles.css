@@ -90,11 +90,11 @@ div.left_sidebar{
 }
 
 div.article-panel {
-    background: #eee;
+    background: rgba(147, 112, 219, 0.2);
     padding: 5px 10px 5px 10px;
     box-sizing: border-box;
     overflow: hidden;
-    color: #555;
+    color: #444;
 }
 
 ul.list-articles {
@@ -103,7 +103,7 @@ ul.list-articles {
 	padding: 0;
 }
 ul.list-articles li {
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #9370DB;
 }
 
 div.article-panel p.first {
