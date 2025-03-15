@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_list_or_404, render, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, TagPost
 
 
 menu = [
@@ -60,6 +60,20 @@ def show_post(request, post_id):
         'cat_selected': post.cat_id,
     }
     return render(request, 'post/post.html', context=data)
+
+
+def show_tag_posts_list(request, tag_slug):
+    tag = get_object_or_404(TagPost, slug=tag_slug)
+    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED)
+
+    data = {
+        'title': f"Тег: {tag.tag}",
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': None,
+    }
+
+    return render(request, 'post/index.html', context=data)
 
 
 def page_not_found(request, exception):

@@ -26,17 +26,22 @@
 
 <div class="row">
 <div class="col-2 left_sidebar">
-	{% if cat_selected == 0 or cat_selected is None %}
-		<p class="selected">Все категории</p>
-		{% else %}
-		<p><a class="link" href="{% url 'home_page' %}">Все категории</a></p>
-		{% endif %}
-		{% show_categories cat_selected %}
+	{% if cat_selected == 0 %}
+		<p class="selected_category">Все категории</p>
+	{% else %}
+		<p><a class="category" href="{% url 'home_page' %}">Все категории</a></p>
+	{% endif %}
+	{% show_categories cat_selected %}
+
+	{% show_all_tags %}
 </div>
 
 <div class="col-8">
-{% block content %}
-{% endblock %}
+	{% block breadcrumbs %}
+	{% endblock %}
+
+	{% block content %}
+	{% endblock %}
 </div>
 </div>
 

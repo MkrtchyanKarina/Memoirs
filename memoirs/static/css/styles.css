@@ -82,8 +82,19 @@ div.left_sidebar{
     color: #9370DB;
     text-decoration: none;
 }
+.category {
+    color: #4B0082;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 600;
+}
 
-.selected {
+.category:hover {
+    color: #9370DB;
+    text-decoration: none;
+    font-weight: 800;
+}
+.selected_category {
     color: #4B0082;
     text-decoration: none;
     font-weight: 800;
@@ -113,4 +124,24 @@ div.article-panel p.first {
 div.article-panel p.last {
     margin: 0;
     float: right;
+}
+
+
+ul.tags-list {
+    width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.tags-list li {
+	margin: 0;
+	padding: 0 0 10px;
+    display: inline-block;
+}
+
+ul.tags-list li a {
+	padding: 5px;
+	font-size: 16px;
+	border: 1px solid #aaa;
 }
