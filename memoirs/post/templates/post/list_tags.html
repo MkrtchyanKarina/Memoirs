@@ -1,6 +1,6 @@
 {% load static %}
 {% if tags %}
-<p>Теги</p>
+<p class="tag">Теги</p>
 <ul class="tags-list">
 {% for t in tags %}
     <li><a href="{{ t.get_absolute_url }}">{{ t.tag }}</a></li>

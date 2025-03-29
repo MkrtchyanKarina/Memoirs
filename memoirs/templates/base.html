@@ -14,34 +14,43 @@
 
 {% block mainmenu %}
 		<div class="header">
+			<div class="responsive-text">
 
 			<div class="row">
-				<div class="col-2"><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>
+				<div class="col-2" ><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>
 				{% for m in menu %}
-				 <button class="col-2 responsive-text" onclick="window.location.href = '{% url m.url_name %}';">{{m.title}}</button>
+				 <button class="col-2" onclick="window.location.href = '{% url m.url_name %}';">{{m.title}}</button>
 
 				{% endfor %}
+			</div>
+			</div>
 		</div>
 {% endblock mainmenu %}
 
 <div class="row">
 <div class="col-2 left_sidebar">
-	{% if cat_selected == 0 %}
-		<p class="selected_category">Все категории</p>
-	{% else %}
-		<p><a class="category" href="{% url 'home_page' %}">Все категории</a></p>
-	{% endif %}
-	{% show_categories cat_selected %}
+	<div class="responsive-text">
+		{% if cat_selected == 0 %}
+			<p class="selected_category">Все категории</p>
+		{% else %}
+			<p><a class="category" href="{% url 'home_page' %}">Все категории</a></p>
+		{% endif %}
+		{% show_categories cat_selected %}
 
-	{% show_all_tags %}
+		{% show_all_tags %}
+	</div>
 </div>
 
 <div class="col-8">
+	<div class="responsive-text">
 	{% block breadcrumbs %}
+
 	{% endblock %}
+
 
 	{% block content %}
 	{% endblock %}
+	</div>
 </div>
 </div>
 

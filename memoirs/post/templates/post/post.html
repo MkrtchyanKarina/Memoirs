@@ -5,6 +5,7 @@
 <!-- Tags -->
 {% with post.tags.all as tags %}
 {% if tags %}
+<br>
 <ul class="tags-list">
     <li>Теги:</li>
     {% for t in tags %}
@@ -17,6 +18,6 @@
 
 
 {% block content %}
-<h1>{{ post.title }}</h1>
+<p style="font-weight: 800;">{{ post.title }}</p>
 <p>{{ post.content | linebreaks }}</p>
 {% endblock %}
