@@ -66,8 +66,8 @@ def contact(request):
 def show_post(request, post_id):
     """
     Функция для отображения поста
-    :param request:
-    :param post_id:
+    :param request: информация о текущем http-запросе
+    :param post_id: идентификатор записи в БД
     :return: через шаблон post.html отображаются теги, связанные с этой записью, заголовок и содержимое
     """
     post = Post.published.get(pk=post_id)
