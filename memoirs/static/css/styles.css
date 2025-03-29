@@ -1,19 +1,20 @@
 
 .selected {color: #0059b2; }
 
-.header {
+div.header button {
 	background: #DDA0DD;
-	height: 60px;
-
+	height: 3rem;
 
 }
+
+
 .clear {clear: both;}
 
-.logo {
-	background: url('../images/logo.png') no-repeat 10px 5px;
-	width: 70px;
-	height: 60px;
-}
+div.logo {
+	background: url('../images/logo.png') no-repeat;
+	width: 100%;
+	height: 100%;
+	}
 
 button{
     background-color: rgba(255, 255, 255, 0.1);
@@ -48,7 +49,7 @@ button::-moz-focus-inner {
 
 @media (max-width: 576px) {
    .responsive-text {
-     font-size: 0.5rem; /* Уменьшаем размер текста для мобильных устройств */
+     font-size: 0.3rem; /* Уменьшаем размер текста для мобильных устройств */
      }
  }
 
@@ -82,12 +83,24 @@ div.left_sidebar{
     color: #9370DB;
     text-decoration: none;
 }
+a.category {
+    color: #4B0082;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 600;
+}
 
-.selected {
+a.category:hover {
+    color: #9370DB;
+    text-decoration: none;
+    font-weight: 800;
+}
+p.selected_category {
     color: #4B0082;
     text-decoration: none;
     font-weight: 800;
 }
+
 
 div.article-panel {
     background: rgba(147, 112, 219, 0.2);
@@ -114,3 +127,36 @@ div.article-panel p.last {
     margin: 0;
     float: right;
 }
+
+
+ul.tags-list {
+    width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.tags-list li {
+	margin: 0;
+	padding: 0 0 10px;
+    display: inline-block;
+
+}
+
+ul.tags-list li a {
+	padding: 5px;
+	border: 1px solid #aaa;
+	color: #800080;
+	text-decoration: none;
+
+}
+
+
+p.tag {
+    color: #800080;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+
+

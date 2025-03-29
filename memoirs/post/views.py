@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_list_or_404, render, get_object_or_404
-from .models import Post, Category
+from .models import Post, Category, TagPost
 
 
 menu = [
@@ -13,6 +13,12 @@ menu = [
 
 
 def show_category(request, cat_slug):
+    """
+    Функция отображения статей из выбранной категории на главной странице
+    :param request: информация о текущем http-запросе
+    :param cat_slug: выбранная категория (ее slug)
+    :return: шаблон index.html - главная страница с боковым меню и списком статей из категории
+    """
     category = get_object_or_404(Category, slug=cat_slug)
     posts = Post.published.filter(cat_id=category.pk)
     data = {
@@ -26,6 +32,11 @@ def show_category(request, cat_slug):
 
 
 def index(request):
+    """
+    Функция для отображения главной страницы
+    :param request: информация о текущем http-запросе
+    :return: шаблон index.html - главная страница со всеми опубликованными записями, отсортированными от новых к старым
+    """
     data = {
         'title': 'home page',
         'menu': menu,
@@ -53,6 +64,12 @@ def contact(request):
 
 
 def show_post(request, post_id):
+    """
+    Функция для отображения поста
+    :param request: информация о текущем http-запросе
+    :param post_id: идентификатор записи в БД
+    :return: через шаблон post.html отображаются теги, связанные с этой записью, заголовок и содержимое
+    """
     post = Post.published.get(pk=post_id)
     data = {
         'menu': menu,
@@ -62,5 +79,31 @@ def show_post(request, post_id):
     return render(request, 'post/post.html', context=data)
 
 
+def show_tag_posts_list(request, tag_slug):
+    """
+    Функция отображения статей по выбранному тегу
+    :param request: информация о текущем http-запросе
+    :param tag_slug: выбранный тег (его slug)
+    :return: шаблон index.html - главная страница с боковым меню и списком статей с искомым тегом
+    """
+    tag = get_object_or_404(TagPost, slug=tag_slug)
+    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED)
+
+    data = {
+        'title': f"Тег: {tag.tag}",
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': None,
+    }
+
+    return render(request, 'post/index.html', context=data)
+
+
 def page_not_found(request, exception):
+    """
+    Страница, которая будет отображаться при ошибке 404 в режиме DEBUG=False
+    :param request: информация о текущем http-запросе
+    :param exception: информация об ошибке
+    :return: сообщение "Страница не найдена"
+    """
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
