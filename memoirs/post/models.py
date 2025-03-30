@@ -35,7 +35,10 @@ class Post(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(choices=Status.choices, default=Status.PUBLISHED)
 
-    cat = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="posts")
+    cat = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="posts")  # related_name - атрибут для обратного связывания
+    # с6 = Category.objects.get(pk=6)
+    # c6.posts - это Query set, т.е. выборка
+    # c6.posts.exists() - пустой ли результат, c6.posts.count() - количество записей, c6.posts.all() - список записей
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags')
 
     objects = models.Manager()
