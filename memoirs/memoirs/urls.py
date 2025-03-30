@@ -25,6 +25,7 @@ urlpatterns = [
     path('__debug__/', include("debug_toolbar.urls")),
 
 ]
-
+admin.site.site_header = "Панель администрирования"
+admin.site.index_title = "Веб-платформа для ведения блога"
 handler404 = page_not_found
 
