@@ -20,7 +20,7 @@ def show_category(request, cat_slug):
     :return: шаблон index.html - главная страница с боковым меню и списком статей из категории
     """
     category = get_object_or_404(Category, slug=cat_slug)
-    posts = Post.published.filter(cat_id=category.pk)
+    posts = Post.published.filter(cat_id=category.pk).select_related('cat')
     data = {
         'title': f'Категория: {category.name}',
         'menu': menu,
@@ -37,10 +37,11 @@ def index(request):
     :param request: информация о текущем http-запросе
     :return: шаблон index.html - главная страница со всеми опубликованными записями, отсортированными от новых к старым
     """
+    posts = Post.published.all().select_related('cat')
     data = {
         'title': 'home page',
         'menu': menu,
-        'posts': Post.published.all(),
+        'posts': posts,
         'cat_selected': 0,
         }
     return render(request, 'post/index.html', context=data)
@@ -87,7 +88,7 @@ def show_tag_posts_list(request, tag_slug):
     :return: шаблон index.html - главная страница с боковым меню и списком статей с искомым тегом
     """
     tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED)
+    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED).select_related('cat')
 
     data = {
         'title': f"Тег: {tag.tag}",
