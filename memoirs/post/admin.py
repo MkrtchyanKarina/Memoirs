@@ -6,6 +6,12 @@ from .models import Post, Category
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """ Класс для настройки отображения статей в админ-панели """
+    fields = ['title', 'content', 'cat', 'tags', 'is_published']
+    # exclude = ['tags']
+    readonly_fields = ['is_published']
+    filter_horizontal = ('tags', )
+
+
     list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')  # поля, которые отображаются в списке статей
     list_display_links = ('title', )  # сделаем оба поля id и title кликабельными
 
@@ -57,6 +63,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name', )}  # автоматическое заполнение поля slug на основе названия категории - name
     list_display = ('id', 'name', 'slug')
     list_display_links = ('id', 'name')
 
