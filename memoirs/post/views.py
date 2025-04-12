@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import get_list_or_404, render, get_object_or_404
+from django.shortcuts import get_list_or_404, render, get_object_or_404, redirect
+
+from .forms import AddPostForm
 from .models import Post, Category, TagPost
 
 
@@ -53,7 +55,20 @@ def about(request):
 
 
 def add_post(request):
-    return HttpResponse("<h1>Добавление нового поста в блог</h1>")
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home_page')
+    else:
+        form = AddPostForm()
+
+    data = {
+        'title': 'Добавить пост',
+        'menu': menu,
+        'form': form,
+    }
+    return render(request, 'post/add_post.html', context=data)
 
 
 def login(request):

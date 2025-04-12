@@ -1,3 +1,4 @@
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.urls import reverse
 
@@ -29,7 +30,11 @@ class Post(models.Model):
         DRAFT = 0, 'Черновик'
         PUBLISHED = 1, 'Опубликовано'
 
-    title = models.CharField(max_length=255, verbose_name="заголовок")
+    title = models.CharField(max_length=255, verbose_name="заголовок",
+                             validators=[
+                                 MinLengthValidator(5, message="Слишком короткий заголовок"),
+                                 MaxLengthValidator(255, message="Слишком длинный заголовок")
+                             ])
     content = models.TextField(blank=True, verbose_name="текст статьи")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="время создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="время изменения")
