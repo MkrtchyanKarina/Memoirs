@@ -1,9 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_list_or_404, render, get_object_or_404, redirect
 
-from .forms import AddPostForm
-from .models import Post, Category, TagPost
-
+from .forms import AddPostForm, UploadFileForm
+from .models import Post, Category, TagPost, UploadFiles
 
 menu = [
     {'title': "Главная страница", 'url_name': 'home_page'},
@@ -49,14 +48,23 @@ def index(request):
     return render(request, 'post/index.html', context=data)
 
 
+
 def about(request):
+    # if request.method == "POST":
+    #     form = UploadFileForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         fp = UploadFiles(file=form.cleaned_data["file"])
+    #         fp.save()
+    # else:
+    #     form = UploadFileForm()
+
     data = {'title': 'О сайте', 'menu': menu}
     return render(request, 'post/about.html', context=data)
 
 
 def add_post(request):
     if request.method == "POST":
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('home_page')

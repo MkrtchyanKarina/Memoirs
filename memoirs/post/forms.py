@@ -8,8 +8,12 @@ class AddPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'is_published', 'cat', 'tags']
+        fields = ['title', 'content', 'images', 'is_published', 'cat', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'class': 'form-input', 'rows': 5}),
         }
+
+
+class UploadFileForm(forms.Form):
+    file = forms.ImageField(label="Файл")

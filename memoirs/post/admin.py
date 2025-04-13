@@ -1,4 +1,6 @@
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
+
 from .models import Post, Category
 
 
@@ -6,13 +8,13 @@ from .models import Post, Category
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """ Класс для настройки отображения статей в админ-панели """
-    fields = ['title', 'content', 'cat', 'tags', 'is_published']
+    fields = ['title', 'content', 'cat', 'tags', 'is_published', 'images', 'post_images']
     # exclude = ['tags']
-    readonly_fields = ['is_published']
+    readonly_fields = ['is_published', 'post_images']
     filter_horizontal = ('tags', )
 
 
-    list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')  # поля, которые отображаются в списке статей
+    list_display = ('title', 'time_create', 'is_published', 'cat', 'post_images')  # поля, которые отображаются в списке статей
     list_display_links = ('title', )  # сделаем оба поля id и title кликабельными
 
     ordering = ['-time_create', 'title']  # сортировка статей по дате и времени добавления (в обратном порядке), а также по названию
@@ -25,14 +27,18 @@ class PostAdmin(admin.ModelAdmin):
 
     list_filter = ['cat__name', 'is_published', 'tags__tag']  # добавим боковую панель фильтров
 
+    save_on_top = True  # отобразим панель с кнопками сохранения и удаления сверху статьи
 
-    @admin.display(description="краткое описание", ordering='content')
-    def brief_info(self, post: Post):
+
+    @admin.display(description="Фото")
+    def post_images(self, post: Post):
         """
-        Функция для отображения дополнительного столбца с количеством символов записи
-        :param post: экземпляр класса Post, т.е. определенная запись из таблицы Постов
+        Функция для отображения фотографии, связанной с данным постом
         """
-        return f"Описание: {len(post.content)} символов"
+        if post.images:
+            return mark_safe(f"<img src='{post.images.url}', width=50>")
+        else:
+            return "Фото отсутствует"
 
 
     @admin.display(description="Опубликовать выбранные Посты")

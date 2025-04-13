@@ -44,6 +44,8 @@ class Post(models.Model):
     cat = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="posts", verbose_name="категории")
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags', verbose_name="теги")
 
+    images = models.ImageField(upload_to="post_images/%Y/%m/%d/", default=None, blank=True, null=True, verbose_name="Изображение")
+
     objects = models.Manager()
     published = PublishedManager()
 
@@ -109,3 +111,7 @@ class TagPost(models.Model):
     def get_absolute_url(self):
         """ Возвращает URL для доступа к конкретному тегу. """
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class UploadFiles(models.Model):
+    file = models.FileField(upload_to="uploads")
