@@ -12,5 +12,7 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     path('category/<slug:cat_slug>/', views.PostCategory.as_view(), name="category"),
     path('tag/<slug:tag_slug>/', views.TagPostList.as_view(), name="tag"),
+    path('edit-post/<int:pk>/', views.UpdatePost.as_view(), name="edit_post"),
+    path('delete-post/<int:pk>/', views.DeletePost.as_view(), name="delete_post"),
 
 ]
