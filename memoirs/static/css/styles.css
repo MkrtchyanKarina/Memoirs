@@ -247,3 +247,55 @@ img.img-article-left.thumb {
 	height: auto;
 }
 
+
+
+
+/* Стили для постраничной навигации */
+.list-pages {
+	text-align: center;
+	margin: 0 0 20px 0;
+}
+.list-pages ul {
+	margin: 20px 0 0 0;
+	padding: 0;
+	list-style: none;
+}
+.list-pages ul li {
+	display: inline-block;
+	margin: 0 20px 0 0;
+}
+
+.list-pages a {
+	color: #4B0082;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 500;
+	font-size: 24px;
+}
+
+.list-pages a:hover {
+    text-decoration: none;
+    color: #9370DB;
+    font-weight: 700;
+}
+
+.list-pages .page-num, .page-num-selected {
+	display: inline-block;
+	width: 60px;
+	height: 44px;
+	border: 1px solid #d0d0d0;
+	border-radius: 30px;
+}
+.list-pages .page-num:hover {
+	box-shadow: 3px 3px 1px #d0d0d0;
+}
+.list-pages .page-num-selected {
+	border: none;
+	color: #000;
+	font-size: 20px;
+}
+.list-pages .page-num-selected:hover {
+	box-shadow: none;
+}
+
+

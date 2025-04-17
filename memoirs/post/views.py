@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -15,14 +16,21 @@ class PostHome(DataMixin, ListView):
     title = 'Главная страница'
     cat_selected = 0
 
+
     def get_queryset(self):
         return Post.published.all().select_related('cat')
 
 
 
 def about(request):
-    data = {'title': 'О сайте'}
-    return render(request, 'post/about.html', context=data)
+    contact_list = Post.published.all()
+    paginator = Paginator(contact_list, 3)
+
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
+
+
+    return render(request, 'post/about.html', context={'page_obj': page_obj, 'title': 'О сайте'})
 
 
 

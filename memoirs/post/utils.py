@@ -6,7 +6,9 @@ menu = [
     {'title': "Войти", 'url_name': 'login'},
 ]
 
+
 class DataMixin:
+    paginate_by = 1   # постраничная навигация для всех классов представления, унаследованных от базового класса ListView
     title = None
     cat_selected = None
     extra_context = {}
