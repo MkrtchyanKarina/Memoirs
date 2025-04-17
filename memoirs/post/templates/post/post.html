@@ -19,5 +19,10 @@
 
 {% block content %}
 <p style="font-weight: 800;">{{ post.title }}</p>
+
+{% if post.images %}
+<p><img src="{{ post.images.url }}"></p>
+{% endif %}
+
 <p>{{ post.content | linebreaks }}</p>
 {% endblock %}

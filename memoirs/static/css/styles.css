@@ -1,5 +1,11 @@
+::selection {
+    background-color: #DDA0DD; /* Цвет фона выделенного текста */
+    color: black; /* Цвет текста при выделении */
+}
+
 
 .selected {color: #0059b2; }
+
 
 div.header button {
 	background: #DDA0DD;
@@ -16,22 +22,22 @@ div.logo {
 	height: 100%;
 	}
 
-button{
-    background-color: rgba(255, 255, 255, 0.1);
+button.menu_btn {
+    background-color: rgba(221, 160, 221, 0.1); /* Исходный цвет фона */
     border: none;
     transition: background-color 0.3s;
     color: white;
     border: 3px ridge rgba(255, 255, 255, 0.3);
-
 }
-button:hover {
-       background-color: rgba(255, 255, 255, 0.3);
-     }
 
-button:active, button:focus {
+button.menu_btn:hover {
+    background-color: rgba(221, 160, 221, 0.5); /* Увеличиваем альфа-канал для более светлого фона */
+}
+
+button.menu_btn:active, button.menu_btn:focus {
   outline: none !important;
 }
-button::-moz-focus-inner {
+button.menu_btn:-moz-focus-inner {
   border: 0 !important;
 }
 
@@ -158,5 +164,138 @@ p.tag {
     font-weight: 800;
 }
 
+
+
+
+/* Стили для меток */
+label.form-label {
+    display: inline-block;
+    min-width: 200px;
+    vertical-align: top;
+    margin-top: -10px;
+    font-weight: bold;
+    color: #6f42c1;
+}
+
+.form-error ul {
+    list-style: none;
+    padding: 0;
+    color: #CC0000;
+}
+
+
+/* Стили для полей ввода */
+
+.form-input {
+    width: calc(100% - 220px); /* Учитываем ширину метки и отступы */
+    padding: 10px; /* Отступ внутри полей ввода */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 4px; /* Закругленные углы */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Легкая тень внутри поля */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки при фокусе */
+}
+
+/* Стили при фокусе на полях ввода */
+.form-input:focus {
+    border-color: #6f42c1; /* Цвет рамки при фокусе (фиолетовый) */
+    outline: none; /* Убираем стандартное обрамление браузера */
+}
+
+.checkbox-container {
+    padding-left: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.checkbox-container label {
+    display: flex;
+    align-items: center;
+}
+
+/* Стили для кнопок */
+button.submit_btn {
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    background-color: #6f42c1; /* Фиолетовый цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    border-radius: 4px; /* Закругленные углы кнопки */
+    cursor: pointer; /* Курсор в виде указателя при наведении на кнопку */
+}
+
+button.submit_btn:hover {
+    background-color: #5a32a3; /* Темнее цвет фона при наведении на кнопку (фиолетовый) */
+}
+
+/* Стили для чекбоксов (если есть) */
+input[type="checkbox"] {
+    accent-color: #6f42c1; /* Фиолетовый цвет чекбокса */
+}
+
+
+img {max-width: 600px; height: auto;}
+
+img.img-article-left {
+	max-width: 300px;
+	height: auto;
+	float: left;
+	padding: 20px 10px 0 0;
+}
+
+img.img-article-left.thumb {
+	max-width: 160px;
+	height: auto;
+}
+
+
+
+
+/* Стили для постраничной навигации */
+.list-pages {
+	text-align: center;
+	margin: 0 0 20px 0;
+}
+.list-pages ul {
+	margin: 20px 0 0 0;
+	padding: 0;
+	list-style: none;
+}
+.list-pages ul li {
+	display: inline-block;
+	margin: 0 20px 0 0;
+}
+
+.list-pages a {
+	color: #4B0082;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 500;
+	font-size: 24px;
+}
+
+.list-pages a:hover {
+    text-decoration: none;
+    color: #9370DB;
+    font-weight: 700;
+}
+
+.list-pages .page-num, .page-num-selected {
+	display: inline-block;
+	width: 60px;
+	height: 44px;
+	border: 1px solid #d0d0d0;
+	border-radius: 30px;
+}
+.list-pages .page-num:hover {
+	box-shadow: 3px 3px 1px #d0d0d0;
+}
+.list-pages .page-num-selected {
+	border: none;
+	color: #000;
+	font-size: 20px;
+}
+.list-pages .page-num-selected:hover {
+	box-shadow: none;
+}
 
 

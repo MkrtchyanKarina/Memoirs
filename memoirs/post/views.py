@@ -1,59 +1,59 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import get_list_or_404, render, get_object_or_404
-from .models import Post, Category, TagPost
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+from .forms import AddPostForm
+from .models import Post, TagPost
+from .utils import DataMixin
 
 
-menu = [
-    {'title': "Главная страница", 'url_name': 'home_page'},
-    {'title': "О сайте", 'url_name': 'about'},
-    {'title': "Добавить пост", 'url_name': 'add_post'},
-    {'title': "Обратная связь", 'url_name': 'contact'},
-    {'title': "Войти", 'url_name': 'login'},
-]
+
+class PostHome(DataMixin, ListView):
+    template_name = "post/index.html"
+    context_object_name = 'posts'
+    title = 'Главная страница'
+    cat_selected = 0
 
 
-def show_category(request, cat_slug):
-    """
-    Функция отображения статей из выбранной категории на главной странице
-    :param request: информация о текущем http-запросе
-    :param cat_slug: выбранная категория (ее slug)
-    :return: шаблон index.html - главная страница с боковым меню и списком статей из категории
-    """
-    category = get_object_or_404(Category, slug=cat_slug)
-    posts = Post.published.filter(cat_id=category.pk).select_related('cat')
-    data = {
-        'title': f'Категория: {category.name}',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': category.pk,
+    def get_queryset(self):
+        return Post.published.all().select_related('cat')
 
-    }
-    return render(request, 'post/index.html', context=data)
-
-
-def index(request):
-    """
-    Функция для отображения главной страницы
-    :param request: информация о текущем http-запросе
-    :return: шаблон index.html - главная страница со всеми опубликованными записями, отсортированными от новых к старым
-    """
-    posts = Post.published.all().select_related('cat')
-    data = {
-        'title': 'home page',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': 0,
-        }
-    return render(request, 'post/index.html', context=data)
 
 
 def about(request):
-    data = {'title': 'О сайте', 'menu': menu}
-    return render(request, 'post/about.html', context=data)
+    contact_list = Post.published.all()
+    paginator = Paginator(contact_list, 3)
+
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
 
 
-def add_post(request):
-    return HttpResponse("<h1>Добавление нового поста в блог</h1>")
+    return render(request, 'post/about.html', context={'page_obj': page_obj, 'title': 'О сайте'})
+
+
+
+class AddPost(DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'post/add_post.html'
+    title = 'Добавление статьи'
+
+
+class UpdatePost(DataMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content', 'images', 'is_published', 'cat', 'tags']
+    template_name = 'post/add_post.html'
+    success_url = reverse_lazy('home_page')
+    title = 'Обновление статьи'
+
+
+class DeletePost(DataMixin, DeleteView):
+    model = Post
+    template_name = 'post/add_post.html'
+    success_url = reverse_lazy('home_page')
+    title = 'Удаление статьи'
+
 
 
 def login(request):
@@ -64,40 +64,47 @@ def contact(request):
     return HttpResponse("<h1>Обратная связь</h1>")
 
 
-def show_post(request, post_id):
-    """
-    Функция для отображения поста
-    :param request: информация о текущем http-запросе
-    :param post_id: идентификатор записи в БД
-    :return: через шаблон post.html отображаются теги, связанные с этой записью, заголовок и содержимое
-    """
-    post = Post.published.get(pk=post_id)
-    data = {
-        'menu': menu,
-        'post': post,
-        'cat_selected': post.cat_id,
-    }
-    return render(request, 'post/post.html', context=data)
+class ShowPost(DataMixin, DetailView):
+    template_name = 'post/post.html'
+    pk_url_kwarg = 'post_id'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=context['post'].title, cat_selected=context['post'].cat_id)
 
 
-def show_tag_posts_list(request, tag_slug):
-    """
-    Функция отображения статей по выбранному тегу
-    :param request: информация о текущем http-запросе
-    :param tag_slug: выбранный тег (его slug)
-    :return: шаблон index.html - главная страница с боковым меню и списком статей с искомым тегом
-    """
-    tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED).select_related('cat')
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
 
-    data = {
-        'title': f"Тег: {tag.tag}",
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': None,
-    }
 
-    return render(request, 'post/index.html', context=data)
+class PostCategory(DataMixin, ListView):
+    template_name = 'post/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Post.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = context['posts'][0].cat
+        return self.get_mixin_context(context, title=f"Категория: {cat.name}", cat_selected=cat.pk)
+
+
+class TagPostList(DataMixin, ListView):
+    context_object_name = 'posts'
+    template_name = 'post/index.html'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Post.published.filter(tags__slug=self.kwargs['tag_slug']).select_related('cat')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
+        return self.get_mixin_context(context, title=f'Тег: {tag.tag}')
+
 
 
 def page_not_found(request, exception):
