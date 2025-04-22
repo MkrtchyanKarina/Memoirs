@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import AddPostForm
@@ -69,10 +69,6 @@ class DeletePost(DataMixin, DeleteView):
     success_url = reverse_lazy('home_page')
     title = 'Удаление статьи'
 
-
-
-def login(request):
-    return HttpResponse("<h1>Войти или зарегистрироваться</h1>")
 
 
 def contact(request):

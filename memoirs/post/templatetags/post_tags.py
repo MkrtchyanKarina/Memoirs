@@ -2,8 +2,14 @@ from django import template
 import post.views as views
 from django.db.models import Count, Q
 from post.models import Category, TagPost
+from post.utils import menu
+
 register = template.Library()
 
+
+@register.simple_tag()
+def show_menu():
+    return menu
 
 
 @register.inclusion_tag('post/list_categories.html')
