@@ -1,6 +1,6 @@
 /venv/
 /memoirs/db.sqlite3
-/memoirs/memoirs/settings.py
 /memoirs/post/migrations/
 /memoirs/users/migrations/
 /.idea/
+/.env
