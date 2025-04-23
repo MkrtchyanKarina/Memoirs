@@ -2,5 +2,5 @@
 /memoirs/db.sqlite3
 /memoirs/post/migrations/
 /memoirs/users/migrations/
-/memoirs/memoirs/secret_key.py
+/.env/
 /.idea/
