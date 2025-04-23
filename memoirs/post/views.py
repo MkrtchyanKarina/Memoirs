@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import AddPostForm
@@ -11,6 +11,15 @@ from .utils import DataMixin
 
 
 class PostHome(DataMixin, ListView):
+    """
+    Представление для отображения главной страницы с опубликованными постами.
+
+    Атрибуты:
+        :template_name (str): Путь к шаблону, который будет использоваться для отображения страницы.
+        :context_object_name (str): Имя переменной контекста, в которой будут храниться объекты.
+        :title (str): Заголовок страницы.
+        :cat_selected (int): Идентификатор выбранной категории (по умолчанию 0).
+    """
     template_name = "post/index.html"
     context_object_name = 'posts'
     title = 'Главная страница'
@@ -18,6 +27,12 @@ class PostHome(DataMixin, ListView):
 
 
     def get_queryset(self):
+        """
+        Возвращает список опубликованных постов.
+
+        Использует метод select_related для предварительной выборки связанных
+        объектов категорий, что позволяет уменьшить количество запросов к базе данных.
+        """
         return Post.published.all().select_related('cat')
 
 
@@ -54,10 +69,6 @@ class DeletePost(DataMixin, DeleteView):
     success_url = reverse_lazy('home_page')
     title = 'Удаление статьи'
 
-
-
-def login(request):
-    return HttpResponse("<h1>Войти или зарегистрироваться</h1>")
 
 
 def contact(request):
