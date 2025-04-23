@@ -2,5 +2,5 @@
 /memoirs/db.sqlite3
 /memoirs/post/migrations/
 /memoirs/users/migrations/
-/.env/
 /.idea/
+/.env
