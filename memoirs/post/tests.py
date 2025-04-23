@@ -9,7 +9,6 @@ class PostModelTest(TestCase):
         cls.post = Post.objects.create(title="new post", is_published=Post.Status.PUBLISHED, cat=Category.objects.get(pk=1))
 
     def test_categories_and_posts(self):
-
         self.assertLessEqual(self.post.is_published, 1)
         self.assertLessEqual(self.post.title, "new post")
         self.assertLessEqual(self.post.content, "")

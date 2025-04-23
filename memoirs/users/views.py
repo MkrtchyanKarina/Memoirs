@@ -15,6 +15,6 @@ class LoginUser(LoginView):
     # def get_success_url(self):
     #     return reverse_lazy("home_page")
 
-def logout_user(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('users:login'))
+# def logout_user(request):
+#     logout(request)
+#     return HttpResponseRedirect(reverse('users:login'))

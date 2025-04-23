@@ -143,5 +143,5 @@ MEDIA_URl = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home_page'
-# LOGIN_URL - ПЕРЕНАПРАВЛЕНИЕ НЕАВТОРИЗОВАННОГО ПОЛЬЗОВАТЕЛЯ ПРИ ПОПЫТКЕ ПОСЕТИТЬ ЗАКРЫТУЮ СТРАНИЦУ САЙТА
-# LOGOUT_REDIRECT_URL - ПЕРЕНАПРАВЛЕНИЕ ПОСЛЕ ВЫХОДА
+LOGIN_URL = 'users:login'
+LOGOUT_REDIRECT_URL = 'home_page'

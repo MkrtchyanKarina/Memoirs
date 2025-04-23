@@ -23,7 +23,13 @@
 				{% endfor %}
 
 				{% if user.is_authenticated %}
-					<button class="col-2 menu_btn" onclick="window.location.href = '{% url 'users:logout' %}';">{{ user.username }} | Выйти</button>
+					<form class="col-2" style="margin: 0; padding: 0;" action="{% url 'users:logout' %}" method="post">
+   						{% csrf_token %}
+    					<button type="submit" class="menu_btn" style="width: 100%;" >{{ user.username }} | Выйти</button>
+					</form>
+<!--					<button type="submit" class="col-2 menu_btn"  onclick="window.location.href = '{% url 'users:logout' %}';">{{ user.username }} | Выйти</button>-->
+
+
 				{% else %}
 					<button class="col-2 menu_btn" onclick="window.location.href = '{% url 'users:login' %}';">Войти</button>
 				{% endif %}
