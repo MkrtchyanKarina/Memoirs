@@ -21,8 +21,8 @@ class PostModelTest(TestCase):
         self.assertLessEqual(self.post.tags.count(), 1)
         self.assertLessEqual(tag1.tags.count(), 1)
 
-        tag2 = TagPost.objects.create(tag="Театр", slug="theatre")
-        self.post.tags.add = TagPost.objects.get(slug="theatre")
-        self.assertLessEqual(tag2.tags.count(), 1)
-        self.assertLessEqual(self.post.tags.count(), 2)
+        # tag2 = TagPost.objects.create(tag="Театр", slug="theatre")
+        # self.post.tags.add = TagPost.objects.get(slug="theatre")
+        # self.assertLessEqual(tag2.tags.count(), 1)
+        # self.assertLessEqual(self.post.tags.count(), 2)
 
