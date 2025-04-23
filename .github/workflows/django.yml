@@ -44,4 +44,5 @@ jobs:
     - name: Run tests
       run: |
         cd memoirs
-        python manage.py test --noinput
+        python manage.py migrate
+        python manage.py test
