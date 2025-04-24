@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.urls import reverse
@@ -43,6 +44,8 @@ class Post(models.Model):
     # преобразуем 1 и 0 в True и False для отображения выбранного виджета ("Опубликовано"/"Черновик") в админ-панели
     cat = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="posts", verbose_name="категории")
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags', verbose_name="теги")
+
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='posts', null=True, default=None)
 
     images = models.ImageField(upload_to="post_images/%Y/%m/%d/", default=None, blank=True, null=True, verbose_name="Изображение")
 
