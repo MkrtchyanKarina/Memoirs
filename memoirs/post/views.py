@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -36,7 +38,7 @@ class PostHome(DataMixin, ListView):
         return Post.published.all().select_related('cat')
 
 
-
+# @login_required
 def about(request):
     contact_list = Post.published.all()
     paginator = Paginator(contact_list, 3)
@@ -49,10 +51,16 @@ def about(request):
 
 
 
-class AddPost(DataMixin, CreateView):
+class AddPost(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'post/add_post.html'
     title = 'Добавление статьи'
+
+    def form_valid(self, form):
+        """ Функция сохранения формы после получения данных о текущем пользователе """
+        w = form.save(commit=False)
+        w.author = self.request.user
+        return super().form_valid(form)
 
 
 class UpdatePost(DataMixin, UpdateView):
