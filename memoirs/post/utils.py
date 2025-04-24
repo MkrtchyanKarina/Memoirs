@@ -2,7 +2,6 @@ menu = [
     {'title': "Главная страница", 'url_name': 'home_page'},
     {'title': "О сайте", 'url_name': 'about'},
     {'title': "Добавить пост", 'url_name': 'add_post'},
-    {'title': "Обратная связь", 'url_name': 'contact'},
 ]
 
 

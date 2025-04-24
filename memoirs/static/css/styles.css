@@ -42,9 +42,8 @@ button.menu_btn:-moz-focus-inner {
 }
 
 
-
 .responsive-text {
-       font-size: 1.5rem; /* Начальный размер текста */
+       font-size: 1.4rem; /* Начальный размер текста */
     }
 
 @media (max-width: 768px) {
@@ -69,6 +68,18 @@ div.left_sidebar{
     height: 100rem;
     border-right: 1px solid #FFFFFF;
     text-align: center;
+
+}
+
+a.log_reg_link {
+    color: white;
+    text-decoration: none;
+
+}
+
+a.log_reg_link:hover {
+    color: white;
+    text-decoration: none;
 
 }
 
