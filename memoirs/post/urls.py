@@ -8,7 +8,6 @@ urlpatterns = [
     path('about/', views.about, name="about"),
     path('post/<int:post_id>/', views.ShowPost.as_view(), name="post"),
     path('add-post/', views.AddPost.as_view(), name="add_post"),  # передаем не ссылку на класс, а вызываем его метод as_view
-    path('contact/', views.contact, name="contact"),
     path('category/<slug:cat_slug>/', views.PostCategory.as_view(), name="category"),
     path('tag/<slug:tag_slug>/', views.TagPostList.as_view(), name="tag"),
     path('edit-post/<int:pk>/', views.UpdatePost.as_view(), name="edit_post"),

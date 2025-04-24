@@ -38,7 +38,7 @@ class PostHome(DataMixin, ListView):
         return Post.published.all().select_related('cat')
 
 
-# @login_required
+
 def about(request):
     contact_list = Post.published.all()
     paginator = Paginator(contact_list, 3)
@@ -77,10 +77,6 @@ class DeletePost(DataMixin, DeleteView):
     success_url = reverse_lazy('home_page')
     title = 'Удаление статьи'
 
-
-
-def contact(request):
-    return HttpResponse("<h1>Обратная связь</h1>")
 
 
 class ShowPost(DataMixin, DetailView):
