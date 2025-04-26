@@ -7,4 +7,6 @@
 {{ user.last_name }}
 <br>
 {{ user.email }}
+<br>
+<a href="{% url 'users:update' user_id=user.pk %}">Редактировать профиль</a>
 {% endblock %}
