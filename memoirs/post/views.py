@@ -52,6 +52,7 @@ def about(request):
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
+    """ Добавление поста """
     form_class = AddPostForm
     template_name = 'post/add_post.html'
     extra_context = {'title': 'Добавление статьи'}
@@ -64,6 +65,7 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
 
 
 class UpdatePost(LoginRequiredMixin, DataMixin, UpdateView):
+    """ Обновление поста """
     model = Post
     form_class = AddPostForm
     template_name = 'post/add_post.html'
@@ -80,6 +82,7 @@ class UpdatePost(LoginRequiredMixin, DataMixin, UpdateView):
 
 
 class DeletePost(LoginRequiredMixin, DataMixin, DeleteView):
+    """ Удаление поста """
     model = Post
     template_name = 'post/add_post.html'
     success_url = reverse_lazy('home_page')
@@ -94,30 +97,24 @@ class DeletePost(LoginRequiredMixin, DataMixin, DeleteView):
             return super().get(request, *args, **kwargs)
 
 
-class UsersPostsList(DataMixin, ListView):
+class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
+    """ Статьи пользователя """
     model = Post
     template_name = 'post/index.html'
     context_object_name = 'posts'
     cat_selected = 0
     title = 'Ваши посты'
 
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect(reverse_lazy('users:login'))
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context.update(self.get_mixin_context(
-    #         title=self.title,
-    #         cat_selected=self.cat_selected
-    #     ))
-    #     return context
+
 
 class ShowPost(DataMixin, DetailView):
+    """ Отображение поста """
     template_name = 'post/post.html'
     pk_url_kwarg = 'post_id'
     context_object_name = 'post'
@@ -132,6 +129,7 @@ class ShowPost(DataMixin, DetailView):
 
 
 class PostCategory(DataMixin, ListView):
+    """ Отображение списка постов по выбранной категории """
     template_name = 'post/index.html'
     context_object_name = 'posts'
     allow_empty = False
