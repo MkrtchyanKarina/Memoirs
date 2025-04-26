@@ -25,5 +25,8 @@
 {% endif %}
 
 <p>{{ post.content | linebreaks }}</p>
-<p>{{ post.author.username }}</p>
+<p>Автор поста: {{ post.author.username }}</p>
+<a href="{% url 'edit_post' pk=post.pk %}">Редактировать пост</a>
+<br>
+<a href="{% url 'delete_post' pk=post.pk %}">Удалить пост</a>
 {% endblock %}

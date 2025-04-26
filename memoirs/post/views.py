@@ -1,8 +1,8 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -52,9 +52,10 @@ def about(request):
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
+    """ Добавление поста """
     form_class = AddPostForm
     template_name = 'post/add_post.html'
-    title = 'Добавление статьи'
+    extra_context = {'title': 'Добавление статьи'}
 
     def form_valid(self, form):
         """ Функция сохранения формы после получения данных о текущем пользователе """
@@ -63,23 +64,57 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePost(DataMixin, UpdateView):
+class UpdatePost(LoginRequiredMixin, DataMixin, UpdateView):
+    """ Обновление поста """
     model = Post
-    fields = ['title', 'content', 'images', 'is_published', 'cat', 'tags']
+    form_class = AddPostForm
     template_name = 'post/add_post.html'
-    success_url = reverse_lazy('home_page')
     title = 'Обновление статьи'
 
+    def get(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            messages.error(request, "У вас нет прав на редактирование этого поста!")
+            return redirect('home_page')
+        else:
+            return super().get(request, *args, **kwargs)
 
-class DeletePost(DataMixin, DeleteView):
+
+
+class DeletePost(LoginRequiredMixin, DataMixin, DeleteView):
+    """ Удаление поста """
     model = Post
     template_name = 'post/add_post.html'
     success_url = reverse_lazy('home_page')
     title = 'Удаление статьи'
 
+    def get(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            messages.error(request, "У вас нет прав на удаление этого поста!")
+            return redirect('home_page')
+        else:
+            return super().get(request, *args, **kwargs)
+
+
+class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
+    """ Статьи пользователя """
+    model = Post
+    template_name = 'post/index.html'
+    context_object_name = 'posts'
+    cat_selected = 0
+    title = 'Ваши посты'
+
+    # def get(self, request, *args, **kwargs):
+    #     return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
+
 
 
 class ShowPost(DataMixin, DetailView):
+    """ Отображение поста """
     template_name = 'post/post.html'
     pk_url_kwarg = 'post_id'
     context_object_name = 'post'
@@ -94,6 +129,7 @@ class ShowPost(DataMixin, DetailView):
 
 
 class PostCategory(DataMixin, ListView):
+    """ Отображение списка постов по выбранной категории """
     template_name = 'post/index.html'
     context_object_name = 'posts'
     allow_empty = False
