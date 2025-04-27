@@ -6,7 +6,7 @@ Memoirs is a web platform for personal blogging. Something similar to [Habr](htt
 ## About author
 This is a pet-project by a first-year student (ITMO University, Faculty of Applied Informatics) in the framework of the "Programming" discipline, Mkrtchyan Karina.
 
-## Настройка проекта  
+## Project setup  
 
 1. **Install dependencies**
     ```bash
