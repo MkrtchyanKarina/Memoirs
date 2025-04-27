@@ -16,7 +16,7 @@ This is a pet-project by a first-year student (ITMO University, Faculty of Appli
 
 3. **Go to the project folder**
     ```bash
-      pip install -r requirements.txt
+      cd memoirs
     ```
 4. **Apply migrations**
     ```bash
