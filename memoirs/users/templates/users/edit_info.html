@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Изменить или добавить информацию</h1>
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Параметр next имеет больший приоритет, нежели параметр LOGIN_REDIRECT_URL = 'home_page' из файла settings.py-->
+    <input type="hidden" name="next" value="{{ next }}" />
+    <!-- Но меньший, чем get_success_url в файле views.py -->
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <p><button type="submit" class="submit_btn">Сохранить</button></p>
+</form>
+{% endblock %}

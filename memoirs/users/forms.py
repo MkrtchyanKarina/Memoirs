@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-import re
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+
 
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label="Логин", widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+
     class Meta:
         model = get_user_model()  # функция возвращает текущую модель пользователя
         fields = ['username', 'password']
@@ -24,25 +25,6 @@ class RegisterUserForm(UserCreationForm):
         model = get_user_model()
         fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
 
-        # labels = {
-        #     'username': 'Логин',
-        #     'email': 'Почта',
-        #     'first_name': 'Имя',
-        #     'last_name': 'Фамилия',
-        #     'password1': 'Пароль',
-        #     'password2': 'Повтор пароля',
-        # }
-        #
-        # widgets = {
-        #     'username': forms.TextInput(attrs={'class': 'form-input'}),
-        #     'email': forms.EmailInput(attrs={'class': 'form-input'}),
-        #     'first_name': forms.TextInput(attrs={'class': 'form-input'}),
-        #     'last_name': forms.TextInput(attrs={'class': 'form-input'}),
-        #     'password1': forms.PasswordInput(attrs={'class': 'form-input'}),
-        #     'password2': forms.PasswordInput(attrs={'class': 'form-input'}),
-        # }
-
-
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -52,9 +34,33 @@ class RegisterUserForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if not re.fullmatch(r"[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}", email):
-            raise forms.ValidationError("Неправильно введен адрес электронной почты")
-        elif get_user_model().objects.filter(email=email).exists():
+        if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError("Этот адрес уже занят")
-        else:
-            return email
+        return email
+
+
+class EditUserForm(UserChangeForm):
+    password = None
+
+    username = forms.CharField(label="Логин", widget=forms.TextInput(attrs={'class': 'form-input'}), help_text="Обязательное поле. Не более 150 символов.")
+    email = forms.EmailField(label="Почта", widget=forms.EmailInput(attrs={'class': 'form-input'}), required=True)
+    first_name = forms.CharField(label="Имя", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
+    last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+    def clean_email(self):
+        current_email = self.instance.email
+        new_email = self.cleaned_data['email']
+        if new_email != current_email:
+            if get_user_model().objects.filter(email=new_email).exists():
+                raise forms.ValidationError("Этот адрес уже занят")
+        return new_email
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if len(username) > 150:
+            raise forms.ValidationError('Логин слишком длинный')
+        return username

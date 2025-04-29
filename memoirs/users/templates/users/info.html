@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
+
+
 {{ user.username }}
 <br>
 {{ user.first_name }}
 <br>
 {{ user.last_name }}
 <br>
-{{ user.email }}
-<br>
-<a href="{% url 'users:update' user_id=user.pk %}">Редактировать профиль</a>
+
+{% if request.user == user %}
+    {{ user.email }}
+    <br>
+        <button class="submit_btn"><a class="log_reg_link" href="{% url 'users:update' user_id=user.pk %} ">Редактировать профиль</a></button>
+    <br>
+
+{% endif %}
+
 {% endblock %}

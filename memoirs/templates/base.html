@@ -26,23 +26,22 @@
 			<div class="responsive-text">
 
 			<div class="row">
-				<div class="col-2" ><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>
+<!--				<div class="col-2" ><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>-->
 				{% for m in mainmenu %}
 				 <button class="col-2 menu_btn" onclick="window.location.href = '{% url m.url_name %}';">{{m.title}}</button>
 				{% endfor %}
 
 				{% if user.is_authenticated %}
-<!--					<form class="col-2" style="margin: 0; padding: 0;" action="{% url 'users:logout' %}" method="post">-->
-<!--   						{% csrf_token %}-->
-<!--    					<button type="submit" class="menu_btn" style="width: 100%;" >{{ user.username }} | Выйти</button>-->
-<!--					</form>-->
+					<form class="col-2" style="margin: 0; padding: 0;" action="{% url 'users:logout' %}" method="post">
+   						{% csrf_token %}
+    					<button type="submit" class="menu_btn" style="width: 100%;" >Выйти</button>
+					</form>
 
-					<button type="submit" class="col-2 menu_btn"><a class="log_reg_link" href="{% url 'users:info' user_id=user.pk %}">{{ user.username }}</a>
-						| <a class="log_reg_link" href="{% url 'users:logout' %}">Выйти</a></button>
-
+					<button type="submit" class="col-2 menu_btn"><a class="log_reg_link" href="{% url 'users:info' user_id=request.user.pk %}">{{ request.user.username }}</a></button>
 				{% else %}
-				<button class="col-2 menu_btn"><a href="{% url 'users:login' %}" class="log_reg_link">Войти</a> |
-					<a href="{% url 'users:register' %}" class="log_reg_link">Регистрация</a></button>
+
+				<button class="col-2 menu_btn"><a href="{% url 'users:login' %}" class="log_reg_link">Войти</a></button>
+				<button class="col-2 menu_btn"><a href="{% url 'users:register' %}" class="log_reg_link">Регистрация</a></button>
 				{% endif %}
 			</div>
 			</div>
@@ -80,6 +79,5 @@
 
 </div>
 </div>
-
 
 </body>

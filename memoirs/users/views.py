@@ -8,13 +8,14 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView, DetailView
 
 from post.utils import DataMixin
-from users.forms import LoginUserForm, RegisterUserForm
+from users.forms import LoginUserForm, RegisterUserForm, EditUserForm
 
 
 class LoginUser(LoginView):
     template_name = 'users/login.html'
     form_class = LoginUserForm
     extra_context = {'title': 'Авторизация'}
+
 
 
 class RegisterUser(CreateView):
@@ -25,13 +26,13 @@ class RegisterUser(CreateView):
 
 
 
-class ChangeUserInformation(LoginRequiredMixin, UpdateView):
+class EditUserInformation(LoginRequiredMixin, UpdateView):
     """ Обновление информации о пользователе """
     model = get_user_model()
+    form_class = EditUserForm
     pk_url_kwarg = "user_id"
-    template_name = "users/register.html"
+    template_name = "users/edit_info.html"
     extra_context = {'title': 'Изменение информации'}
-    fields = ['username', 'email', 'first_name', 'last_name']
 
     def get_success_url(self):
         return reverse('users:info', kwargs={'user_id': self.object.pk})
@@ -47,7 +48,7 @@ class ChangeUserInformation(LoginRequiredMixin, UpdateView):
 
 
 
-class ShowUserInformation(LoginRequiredMixin, DetailView):
+class ShowPersonalInformation(LoginRequiredMixin, DetailView):
     """ Информация о текущем пользователе """
     model = get_user_model()
     pk_url_kwarg = "user_id"
@@ -55,15 +56,10 @@ class ShowUserInformation(LoginRequiredMixin, DetailView):
     context_object_name = 'user'
     extra_context = {'title': 'Информация'}
 
+
     def get_success_url(self):
         return reverse('users:info', kwargs={'user_id': self.object.pk})
 
-    def get(self, request, *args, **kwargs):
-        user = self.get_object()
-        if user.pk != request.user.pk:
-            messages.error(request, "У вас нет прав на просмотр информации об этом пользователе!")
-            return redirect('home_page')
-        return super().get(request, *args, *kwargs)
 
 
 
