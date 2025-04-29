@@ -105,9 +105,6 @@ class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
     cat_selected = 0
     title = 'Ваши посты'
 
-    # def get(self, request, *args, **kwargs):
-    #     return super().get(request, *args, **kwargs)
-
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
 

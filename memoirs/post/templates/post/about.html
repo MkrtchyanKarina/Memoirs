@@ -1,17 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{ title }}</h1>
-<!--{% for item in page_obj %}-->
-<!--<p>{{ item.pk }}: {{ item.title }}</p>-->
-<!--{% endfor %}-->
-
-<!--<nav>-->
-<!--    <ul>-->
-<!--        {% for p in page_obj.paginator.page_range %}-->
-<!--        <li>-->
-<!--            <a href="?page={{ p }}">{{ p }}</a>-->
-<!--        </li>-->
-<!--        {% endfor %}-->
-<!--    </ul>-->
-<!--</nav>-->
+<h2>Memoirs</h2>
+<h3>About project</h3>
+<p>Memoirs is a web platform for personal blogging. Something similar to Habr or Yandex dzen.
+    Here users can register, write their posts, find posts by selected tags and categories.</p>
+<h3>About author</h3>
+<p>This is a pet-project by a first-year student (ITMO University, Faculty of Applied Informatics)
+    in the framework of the "Programming" discipline, Mkrtchyan Karina.</p>
+<a href="https://github.com/MkrtchyanKarina/Memoirs">Link on the repository</a>
 {% endblock %}
