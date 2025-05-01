@@ -57,6 +57,10 @@ class Post(models.Model):
         return self.title
 
     class Meta:
+        """ Мета модель для изменения опций:
+         verbose_name: для изменения названия модели при отображении в админ-панели
+         ordering: сортировка статей от новых к старым (например, на главной странице или в списке статей конкретного пользователя)
+         """
         verbose_name = "Пост"
         verbose_name_plural = "Посты"
         ordering = ['-time_create']
@@ -114,7 +118,3 @@ class TagPost(models.Model):
     def get_absolute_url(self):
         """ Возвращает URL для доступа к конкретному тегу. """
         return reverse('tag', kwargs={'tag_slug': self.slug})
-
-
-class UploadFiles(models.Model):
-    file = models.FileField(upload_to="uploads")

@@ -141,6 +141,7 @@ class PostCategory(DataMixin, ListView):
 
 
 class TagPostList(DataMixin, ListView):
+    """ Отображение списка постов по выбранному тегу """
     context_object_name = 'posts'
     template_name = 'post/index.html'
     allow_empty = False
