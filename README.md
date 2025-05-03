@@ -4,7 +4,7 @@
 Memoirs is a web platform for personal blogging. Something similar to [Habr](https://habr.com/ru/articles/) or [Yandex dzen](https://dzen.ru/). Here users can register, write their posts, find posts by selected tags and categories.
 
 ## About author
-This is a pet-project by a first-year student (ITMO University, Faculty of Applied Informatics) in the framework of the "Programming" discipline, Mkrtchyan Karina.
+This is a pet-project by the first-year student (ITMO University, Faculty of Applied Informatics) Mkrtchyan Karina.
 
 ## Project setup  
 

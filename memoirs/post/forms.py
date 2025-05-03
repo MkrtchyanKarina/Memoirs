@@ -3,6 +3,14 @@ from .models import Category, TagPost, Post
 
 
 class AddPostForm(forms.ModelForm):
+    """ Форма для добавления поста
+    title: заголовок (обязательное поле)
+    content: одержимое поста (необязательное)
+    images: изображение (необязательное)
+    is_published: статус статьи - опубликована/черновик (обязательное, по-умолчанию DRAFT/False)
+    cat: категория (обязательное)
+    tags: теги (необязательное)
+    """
     cat = forms.ModelChoiceField(queryset=Category.objects.all(), label="Категория", empty_label="Категория не выбрана", widget=forms.Select)
     tags = forms.ModelMultipleChoiceField(queryset=TagPost.objects.all(), required=False, label="Теги", widget=forms.CheckboxSelectMultiple(attrs={'class': 'checkbox-container'}))
 
@@ -13,7 +21,3 @@ class AddPostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'class': 'form-input', 'rows': 5}),
         }
-
-
-class UploadFileForm(forms.Form):
-    file = forms.ImageField(label="Файл")

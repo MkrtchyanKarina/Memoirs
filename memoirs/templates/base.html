@@ -26,7 +26,7 @@
 			<div class="responsive-text">
 
 			<div class="row">
-<!--				<div class="col-2" ><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>-->
+				<div class="col-2" ><a href="{% url 'home_page' %}"><div class="logo"></div></a></div>
 				{% for m in mainmenu %}
 				 <button class="col-2 menu_btn" onclick="window.location.href = '{% url m.url_name %}';">{{m.title}}</button>
 				{% endfor %}
@@ -37,11 +37,10 @@
     					<button type="submit" class="menu_btn" style="width: 100%;" >Выйти</button>
 					</form>
 
-					<button type="submit" class="col-2 menu_btn"><a class="log_reg_link" href="{% url 'users:info' user_id=request.user.pk %}">{{ request.user.username }}</a></button>
+					<button type="submit" class="col-2 menu_btn"><a class="log_reg_link" href="{% url 'users:profile' user_id=request.user.pk %}">{{ request.user.username }}</a></button>
 				{% else %}
-
-				<button class="col-2 menu_btn"><a href="{% url 'users:login' %}" class="log_reg_link">Войти</a></button>
-				<button class="col-2 menu_btn"><a href="{% url 'users:register' %}" class="log_reg_link">Регистрация</a></button>
+				<button class="col-2 menu_btn" onclick="window.location.href = '{% url 'users:login' %}';">Войти</button>
+				<button class="col-2 menu_btn" onclick="window.location.href = '{% url 'users:register' %}';">Регистрация</button>
 				{% endif %}
 			</div>
 			</div>

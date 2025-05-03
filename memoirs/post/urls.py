@@ -12,6 +12,6 @@ urlpatterns = [
     path('tag/<slug:tag_slug>/', views.TagPostList.as_view(), name="tag"),
     path('edit-post/<int:pk>/', views.UpdatePost.as_view(), name="edit_post"),
     path('delete-post/<int:pk>/', views.DeletePost.as_view(), name="delete_post"),
-    path('my-posts/', views.UsersPostsList.as_view(), name='my_posts'),
+    path('users-posts/<int:user_id>/', views.UsersPostsList.as_view(), name='users_posts'),
 
 ]

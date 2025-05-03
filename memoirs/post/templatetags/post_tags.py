@@ -14,12 +14,13 @@ def show_menu():
 
 @register.inclusion_tag('post/list_categories.html')
 def show_categories(cat_selected=0):
+    """ Отображение категорий, для которых существуют опубликованные статьи """
     categories = Category.objects.annotate(total=Count('posts', filter=Q(posts__is_published=1))).filter(total__gt=0)
-
     return {'categories': categories, 'cat_selected': cat_selected}
 
 
 @register.inclusion_tag('post/list_tags.html')
 def show_all_tags():
+    """ Отображение тегов, используемых в опубликованных статьях """
     tags = TagPost.objects.annotate(total=Count('tags', filter=Q(tags__is_published=1))).filter(total__gt=0)
     return {'tags': tags}

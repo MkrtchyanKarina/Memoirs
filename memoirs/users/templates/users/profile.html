@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<p style="font-weight: 600;">Логин: {{ user.username }}</p>
+<br>
+<p style="font-weight: 600;">Имя: {{ user.first_name }}</p>
+<br>
+<p style="font-weight: 600;">Фамилия: {{ user.last_name }}</p>
+<br>
+
+{% if request.user == user %}
+    <p style="font-weight: 600;">Почта: {{ user.email }}</p>
+    <br>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users:edit' user_id=user.pk %}';">Редактировать профиль</button>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users_posts' user_id=user.pk %}';">Мои посты</button>
+
+{% else %}
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users_posts' user_id=user.pk %}';">Посты {{ user.username }}</button>
+{% endif %}
+
+{% endblock %}

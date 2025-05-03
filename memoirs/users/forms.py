@@ -15,8 +15,8 @@ class LoginUserForm(AuthenticationForm):
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label="Логин", widget=forms.TextInput(attrs={'class': 'form-input'}))
     email = forms.EmailField(label="Почта", widget=forms.EmailInput(attrs={'class': 'form-input'}))
-    first_name = forms.CharField(label="Имя", widget=forms.TextInput(attrs={'class': 'form-input'}))
-    last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(attrs={'class': 'form-input'}))
+    first_name = forms.CharField(label="Имя", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
+    last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
     password1 = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={'class': 'form-input'}))
     password2 = forms.CharField(label="Повтор пароля", widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
@@ -42,25 +42,11 @@ class RegisterUserForm(UserCreationForm):
 class EditUserForm(UserChangeForm):
     password = None
 
-    username = forms.CharField(label="Логин", widget=forms.TextInput(attrs={'class': 'form-input'}), help_text="Обязательное поле. Не более 150 символов.")
-    email = forms.EmailField(label="Почта", widget=forms.EmailInput(attrs={'class': 'form-input'}), required=True)
+    username = forms.CharField(label="Логин", widget=forms.TextInput(attrs={'class': 'form-input'}), disabled=True)
+    email = forms.EmailField(label="Почта", widget=forms.EmailInput(attrs={'class': 'form-input'}), disabled=True)
     first_name = forms.CharField(label="Имя", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
     last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(attrs={'class': 'form-input'}), required=False)
 
     class Meta:
         model = get_user_model()
         fields = ['username', 'email', 'first_name', 'last_name']
-
-    def clean_email(self):
-        current_email = self.instance.email
-        new_email = self.cleaned_data['email']
-        if new_email != current_email:
-            if get_user_model().objects.filter(email=new_email).exists():
-                raise forms.ValidationError("Этот адрес уже занят")
-        return new_email
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if len(username) > 150:
-            raise forms.ValidationError('Логин слишком длинный')
-        return username
