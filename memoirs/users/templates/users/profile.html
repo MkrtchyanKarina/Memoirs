@@ -4,15 +4,15 @@
 
 <p style="font-weight: 600;">Логин: {{ user.username }}</p>
 <br>
-<p style="font-weight: 600;">Логин: {{ user.first_name }}</p>
+<p style="font-weight: 600;">Имя: {{ user.first_name }}</p>
 <br>
-<p style="font-weight: 600;">Логин: {{ user.last_name }}</p>
+<p style="font-weight: 600;">Фамилия: {{ user.last_name }}</p>
 <br>
 
 {% if request.user == user %}
-    <p style="font-weight: 600;">Логин: {{ user.email }}</p>
+    <p style="font-weight: 600;">Почта: {{ user.email }}</p>
     <br>
-    <button class="submit_btn" onclick="window.location.href = '{% url 'users:update' user_id=user.pk %}';">Редактировать профиль</button>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users:edit' user_id=user.pk %}';">Редактировать профиль</button>
     <button class="submit_btn" onclick="window.location.href = '{% url 'users_posts' user_id=user.pk %}';">Мои посты</button>
 
 {% else %}

@@ -26,7 +26,7 @@
 
 <p>{{ post.content | linebreaks }}</p>
 {% if post.author %}
-<p style="font-weight: 600;">Автор поста: <a href="{% url 'users:info' user_id=post.author.pk %}" class="link">{{ post.author.username }}</a></p>
+<p style="font-weight: 600;">Автор поста: <a href="{% url 'users:profile' user_id=post.author.pk %}" class="link">{{ post.author.username }}</a></p>
     <br>
     {% if post.author.pk == request.user.pk %}
     <button class="submit_btn" onclick="window.location.href = '{% url 'edit_post' pk=post.pk %}';">Редактировать пост</button>

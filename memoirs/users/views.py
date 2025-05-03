@@ -29,11 +29,11 @@ class EditUserInformation(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = EditUserForm
     pk_url_kwarg = "user_id"
-    template_name = "users/edit_info.html"
+    template_name = "users/edit_profile.html"
     extra_context = {'title': 'Изменение информации'}
 
     def get_success_url(self):
-        return reverse('users:info', kwargs={'user_id': self.object.pk})
+        return reverse('users:profile', kwargs={'user_id': self.object.pk})
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
@@ -50,10 +50,10 @@ class ShowPersonalInformation(LoginRequiredMixin, DetailView):
     """ Информация о текущем пользователе """
     model = get_user_model()
     pk_url_kwarg = "user_id"
-    template_name = "users/info.html"
+    template_name = "users/profile.html"
     context_object_name = 'user'
     extra_context = {'title': 'Информация'}
 
 
     def get_success_url(self):
-        return reverse('users:info', kwargs={'user_id': self.object.pk})
+        return reverse('users:profile', kwargs={'user_id': self.object.pk})

@@ -129,7 +129,8 @@ class ShowPost(DataMixin, DetailView):
 
 
     def get_object(self, queryset=None):
-        if self.request.user.pk == Post.objects.get(pk=self.kwargs['post_id']).author.pk:
+        author = Post.objects.get(pk=self.kwargs['post_id']).author
+        if author is None or self.request.user.pk == author.pk:
             return get_object_or_404(Post.objects, pk=self.kwargs['post_id'])
         else:
             return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
