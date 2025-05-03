@@ -26,11 +26,12 @@
 
 <p>{{ post.content | linebreaks }}</p>
 {% if post.author %}
-    <a href="{% url 'users:info' user_id=post.author.pk %}" style="font-weight: 800;">Автор поста: {{ post.author.username }}</a>
+<p style="font-weight: 600;">Автор поста: <a href="{% url 'users:info' user_id=post.author.pk %}" class="link">{{ post.author.username }}</a></p>
     <br>
     {% if post.author.pk == request.user.pk %}
-    <button class="submit_btn"> <a class="log_reg_link" href="{% url 'edit_post' pk=post.pk %}">Редактировать пост</a>
-        | <a class="log_reg_link" href="{% url 'delete_post' pk=post.pk %}">Удалить пост</a> </button>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'edit_post' pk=post.pk %}';">Редактировать пост</button>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'delete_post' pk=post.pk %}';">Удалить пост</button>
+
     {% endif %}
 {% else %}
     <p style="font-weight: 800;">Автор неизвестен</p>

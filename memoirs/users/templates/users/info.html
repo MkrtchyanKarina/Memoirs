@@ -2,19 +2,21 @@
 {% block content %}
 
 
-{{ user.username }}
+<p style="font-weight: 600;">Логин: {{ user.username }}</p>
 <br>
-{{ user.first_name }}
+<p style="font-weight: 600;">Логин: {{ user.first_name }}</p>
 <br>
-{{ user.last_name }}
+<p style="font-weight: 600;">Логин: {{ user.last_name }}</p>
 <br>
 
 {% if request.user == user %}
-    {{ user.email }}
+    <p style="font-weight: 600;">Логин: {{ user.email }}</p>
     <br>
-        <button class="submit_btn"><a class="log_reg_link" href="{% url 'users:update' user_id=user.pk %} ">Редактировать профиль</a></button>
-    <br>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users:update' user_id=user.pk %}';">Редактировать профиль</button>
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users_posts' user_id=user.pk %}';">Мои посты</button>
 
+{% else %}
+    <button class="submit_btn" onclick="window.location.href = '{% url 'users_posts' user_id=user.pk %}';">Посты {{ user.username }}</button>
 {% endif %}
 
 {% endblock %}

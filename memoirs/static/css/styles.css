@@ -28,6 +28,7 @@ button.menu_btn {
     transition: background-color 0.3s;
     color: white;
     border: 3px ridge rgba(255, 255, 255, 0.3);
+    cursor: pointer;
 }
 
 button.menu_btn:hover {
@@ -83,20 +84,20 @@ a.log_reg_link:hover {
 
 }
 
-.link {
+a.link {
     color: #4B0082;
     text-decoration: none;
     transition: color 0.3s;
     font-weight: 600;
 }
 
-.link:hover {
+a.link:hover {
     color: #9370DB;
     text-decoration: none;
     font-weight: 800;
 }
 
-.link:visited {
+a.link:visited {
     color: #9370DB;
     text-decoration: none;
 }
@@ -225,18 +226,30 @@ label.form-label {
 }
 
 /* Стили для кнопок */
+
+
 button.submit_btn {
-    padding: 10px 15px; /* Отступы внутри кнопки */
-    background-color: #6f42c1; /* Фиолетовый цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    border: none; /* Убираем рамку */
-    border-radius: 4px; /* Закругленные углы кнопки */
-    cursor: pointer; /* Курсор в виде указателя при наведении на кнопку */
+    background-color: #6f42c1; /* Исходный цвет фона */
+    border: none;
+    transition: background-color 0.3s;
+    color: white;
+    border: 3px ridge rgba(255, 255, 255, 0.3);
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 button.submit_btn:hover {
-    background-color: #5a32a3; /* Темнее цвет фона при наведении на кнопку (фиолетовый) */
+    background-color: #5a32a3;
 }
+
+button.submit_btn:active, button.submit_btn:focus {
+  outline: none !important;
+}
+button.submit_btn:-moz-focus-inner {
+  border: 0 !important;
+}
+
 
 /* Стили для чекбоксов (если есть) */
 input[type="checkbox"] {

@@ -1,13 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
-from post.utils import DataMixin
 from users.forms import LoginUserForm, RegisterUserForm, EditUserForm
 
 
@@ -59,12 +57,3 @@ class ShowPersonalInformation(LoginRequiredMixin, DetailView):
 
     def get_success_url(self):
         return reverse('users:info', kwargs={'user_id': self.object.pk})
-
-
-
-
-
-
-
-
-

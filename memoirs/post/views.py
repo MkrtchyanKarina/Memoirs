@@ -40,22 +40,24 @@ class PostHome(DataMixin, ListView):
 
 
 def about(request):
-    contact_list = Post.published.all()
-    paginator = Paginator(contact_list, 3)
-
-    page_num = request.GET.get('page')
-    page_obj = paginator.get_page(page_num)
-
-
-    return render(request, 'post/about.html', context={'page_obj': page_obj, 'title': 'О сайте'})
+    """
+    Информация о сайте
+    :param request: информация о текущем http-запросе
+    :return: страница about.html
+    """
+    return render(request, 'post/about.html', context={'title': 'О сайте'})
 
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
-    """ Добавление поста """
+    """ Добавление поста
+    :form_class: используемая форма
+    :template_name: используемый шаблон
+    :title: заголовок страницы
+    """
     form_class = AddPostForm
     template_name = 'post/add_post.html'
-    extra_context = {'title': 'Добавление статьи'}
+    title = 'Добавление статьи'
 
     def form_valid(self, form):
         """ Функция сохранения формы после получения данных о текущем пользователе """
@@ -100,13 +102,18 @@ class DeletePost(LoginRequiredMixin, DataMixin, DeleteView):
 class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
     """ Статьи пользователя """
     model = Post
-    template_name = 'post/index.html'
+    pk_url_kwarg = "user_id"
+    template_name = "post/index.html"
     context_object_name = 'posts'
-    cat_selected = 0
-    title = 'Ваши посты'
+    title = 'Статьи пользователя'
 
     def get_queryset(self):
-        return Post.objects.filter(author=self.request.user)
+        requested_usr_id = self.kwargs['user_id']
+        actual_usr_id = self.request.user.pk
+        if actual_usr_id == requested_usr_id:
+            return Post.objects.filter(author=requested_usr_id)
+        else:
+            return Post.published.filter(author=requested_usr_id)
 
 
 
@@ -122,7 +129,10 @@ class ShowPost(DataMixin, DetailView):
 
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
+        if self.request.user.pk == Post.objects.get(pk=self.kwargs['post_id']).author.pk:
+            return get_object_or_404(Post.objects, pk=self.kwargs['post_id'])
+        else:
+            return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
 
 
 class PostCategory(DataMixin, ListView):
