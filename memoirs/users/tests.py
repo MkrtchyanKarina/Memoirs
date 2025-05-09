@@ -8,10 +8,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class MySeleniumTests(StaticLiveServerTestCase):
-
     def setUp(self):
-        super().setUp()
-        self.browser = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        self.browser = webdriver.Chrome(options=options)
 
 
     def test1_register(self):
@@ -57,6 +58,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
 
 
+
+
         # self.browser.get(self.live_server_url + '/users/login/')
         #
         # WebDriverWait(self.browser, 20).until(EC.element_to_be_clickable((By.TAG_NAME, "form"))).click()
@@ -74,8 +77,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
 
     def tearDown(self):
-        self.browser.delete_all_cookies()
-        self.browser.execute_script("window.localStorage.clear();")
-        self.browser.execute_script("window.sessionStorage.clear();")
+        # self.browser.delete_all_cookies()
+        # self.browser.execute_script("window.localStorage.clear();")
+        # self.browser.execute_script("window.sessionStorage.clear();")
         self.browser.quit()
 
