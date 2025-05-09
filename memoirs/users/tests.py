@@ -9,7 +9,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class MySeleniumTests(StaticLiveServerTestCase):
     def setUp(self):
+        super().setUp()
         options = webdriver.ChromeOptions()
+        options.add_argument("--incognito")  # Режим инкогнито
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         self.browser = webdriver.Chrome(options=options)
@@ -77,8 +79,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
 
     def tearDown(self):
-        # self.browser.delete_all_cookies()
-        # self.browser.execute_script("window.localStorage.clear();")
-        # self.browser.execute_script("window.sessionStorage.clear();")
+        self.browser.delete_all_cookies()
+        self.browser.execute_script("window.localStorage.clear();")
+        self.browser.execute_script("window.sessionStorage.clear();")
         self.browser.quit()
 
