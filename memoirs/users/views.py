@@ -3,10 +3,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 
-from users.forms import LoginUserForm, RegisterUserForm, EditUserForm
+from users.forms import LoginUserForm, RegisterUserForm, EditUserForm, UserPasswordChangeForm
 
 
 class LoginUser(LoginView):
@@ -57,3 +57,10 @@ class ShowPersonalInformation(LoginRequiredMixin, DetailView):
 
     def get_success_url(self):
         return reverse('users:profile', kwargs={'user_id': self.object.pk})
+
+
+class UserPasswordChange(PasswordChangeView):
+    form_class = UserPasswordChangeForm
+    success_url = reverse_lazy("users:password_change_done")
+    template_name = "users/password_change_form.html"
+    title = "Смена пароля"
