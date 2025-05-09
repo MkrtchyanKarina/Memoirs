@@ -8,10 +8,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class MySeleniumTests(StaticLiveServerTestCase):
-
     def setUp(self):
         super().setUp()
-        self.browser = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument("--incognito")  # Режим инкогнито
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        self.browser = webdriver.Chrome(options=options)
 
 
     def test1_register(self):
@@ -52,6 +55,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
         submit_button = form.find_element(By.TAG_NAME, "button")
         submit_button.click()
+
+
 
 
 
