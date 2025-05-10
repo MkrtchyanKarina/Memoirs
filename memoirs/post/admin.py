@@ -8,7 +8,7 @@ from .models import Post, Category
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     """ Класс для настройки отображения статей в админ-панели """
-    fields = ['title', 'content', 'cat', 'tags', 'is_published', 'images', 'post_images']
+    fields = ['title', 'content', 'author', 'cat', 'tags', 'is_published', 'images', 'post_images']
     # exclude = ['tags']
     readonly_fields = ['is_published', 'post_images']
     filter_horizontal = ('tags', )
