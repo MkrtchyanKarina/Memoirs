@@ -1,22 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<!--Отображение информации о каждой статье-->
 <ul class="list-articles">
 	{% for p in posts %}
+		{% with p.author as author %}
 		<li>
 			<div class="article-panel">
-			<p class="first">Категория: {{ p.cat.name }}  |  Автор: {{ p.author.username|default:"неизвестен" }}</p>
+			<p class="first">Категория: {{ p.cat.name }}  |  Автор: {{ author.username|default:"неизвестен" }}</p>
 			<p class="last">Дата: {{ p.time_update | date:"d.m.Y H:i:s" }}</p>
 			</div>
+
+		<!--Отображение статуса статей в личном кабинете автора-->
+			{% if author == request.user %}
+				{% if p.is_published %}
+					<p style="color: green; font-weight: 600;">Опубликовано</p>
+				{% else %}
+					<p style="color: red; font-weight: 600;">Черновик</p>
+				{% endif %}
+			{% endif %}
+		{% endwith %}
+
+		<!--Выводим изображения, если они есть-->
 			{% if p.images %}
 			<p><img class="img-article-left thumb" src="{{ p.images.url }}"></p>
 			{% endif %}
+		<!--Заголовок статьи и первые 30 слов её содержания-->
 			<p style="font-weight: 800;">{{p.title}}</p>
-    	{% autoescape off %}
-		{{p.content | linebreaks | truncatewords:30}}
-    	{% endautoescape %}
-				<div class="clear"></div>
-				<p class="link-read-post"><a class="link" href="{{ p.get_absolute_url }}">Читать пост</a></p>
-				</li>
+    		{% autoescape off %}
+				{{p.content | linebreaks | truncatewords:30}}
+    		{% endautoescape %}
+
+			<p class="link-read-post"><a class="link" href="{{ p.get_absolute_url }}">Читать пост</a></p>
+		</li>
 	{% endfor %}
 </ul>
 {% endblock %}
