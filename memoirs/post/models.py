@@ -118,3 +118,18 @@ class TagPost(models.Model):
     def get_absolute_url(self):
         """ Возвращает URL для доступа к конкретному тегу. """
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class Comment(models.Model):
+    objects = models.Manager()
+    text = models.TextField(blank=False, verbose_name='содержимое комментария')
+    post = models.ForeignKey('Post', blank=False, on_delete=models.CASCADE, related_name='comments', verbose_name="пост")
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='comments', null=True, default=None)
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="время создания")
+    time_update = models.DateTimeField(auto_now=True, verbose_name="время изменения")
+
+    def __str__(self):
+        return self.author, self.text
+
+    class Meta:
+        ordering = ['-time_create']

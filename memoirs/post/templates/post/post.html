@@ -49,4 +49,25 @@
     {% endif %}
 
 {% endwith %}
+
+<h3>Комментарии</h3>
+<!--Комментарии к посту-->
+
+<button class="submit_btn" onclick="window.location.href = '{% url 'add_comm' post_id=post.pk %}';">Добавить комментарий</button>
+<ul class="list-articles">
+    {% for comm in post.comments.all %}
+		<li>
+			<div class="article-panel">
+			    <p class="first">Автор: {{ comm.author | default:"неизвестен" }}</p>
+			    <p class="last">Дата: {{ comm.time_update | date:"d.m.Y H:i:s" }}</p>
+			</div>
+
+		<!--Заголовок статьи и первые 30 слов её содержания-->
+    		{% autoescape off %}
+				{{ comm.text | linebreaks }}
+    		{% endautoescape %}
+		</li>
+	{% endfor %}
+</ul>
+
 {% endblock %}

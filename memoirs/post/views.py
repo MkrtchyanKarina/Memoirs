@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import AddPostForm
+from .forms import AddPostForm, AddCommentForm
 from .models import Post, TagPost
 from .utils import DataMixin
 
@@ -64,6 +64,23 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
         w = form.save(commit=False)
         w.author = self.request.user
         return super().form_valid(form)
+
+
+class AddComment(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddCommentForm
+    template_name = 'post/add_post.html'
+    title = 'Добавить комментарий'
+
+
+    def form_valid(self, form):
+        """ Функция сохранения формы после получения данных о текущем пользователе и посте """
+        f = form.save(commit=False)
+        f.author = self.request.user
+        f.post = Post.objects.get(pk=self.kwargs['post_id'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('post', kwargs={'post_id': self.kwargs['post_id']})
 
 
 class UpdatePost(LoginRequiredMixin, DataMixin, UpdateView):

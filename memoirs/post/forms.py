@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, TagPost, Post
+from .models import Category, TagPost, Post, Comment
 
 
 class AddPostForm(forms.ModelForm):
@@ -21,3 +21,9 @@ class AddPostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'class': 'form-input', 'rows': 5}),
         }
+
+
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
