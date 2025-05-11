@@ -2,39 +2,72 @@
 
 
 {% block breadcrumbs %}
-<!-- Tags -->
-{% with post.tags.all as tags %}
-{% if tags %}
-<br>
-<ul class="tags-list">
-    <li>Теги:</li>
-    {% for t in tags %}
-        <li><a href="{{ t.get_absolute_url }}">{{ t.tag }}</a></li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+<!-- Теги, относящиеся к посту  -->
+    {% with post.tags.all as tags %}
+        {% if tags %}
+            <br>
+            <ul class="tags-list">
+                <li>Теги:</li>
+                    {% for t in tags %}
+                        <li><a href="{{ t.get_absolute_url }}">{{ t.tag }}</a></li>
+                    {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 
-
+<!--Содержание статьи-->
 {% block content %}
-<p style="font-weight: 800;">{{ post.title }}</p>
+    <p style="font-weight: 800;">{{ post.title }}</p>
 
-{% if post.images %}
-<p><img src="{{ post.images.url }}"></p>
-{% endif %}
-
-<p>{{ post.content | linebreaks }}</p>
-{% if post.author %}
-<p style="font-weight: 600;">Автор поста: <a href="{% url 'users:profile' user_id=post.author.pk %}" class="link">{{ post.author.username }}</a></p>
-    <br>
-    {% if post.author.pk == request.user.pk %}
-    <button class="submit_btn" onclick="window.location.href = '{% url 'edit_post' pk=post.pk %}';">Редактировать пост</button>
-    <button class="submit_btn" onclick="window.location.href = '{% url 'delete_post' pk=post.pk %}';">Удалить пост</button>
-
+    {% if post.images %}
+        <p><img src="{{ post.images.url }}"></p>
     {% endif %}
-{% else %}
-    <p style="font-weight: 800;">Автор неизвестен</p>
-{% endif %}
+
+    <p>{{ post.content | linebreaks }}</p>
+
+<!--    Автор поста-->
+    {% with post.author as author %}
+
+    {% if author %}
+        <p style="font-weight: 600;">Автор поста: <a href="{% url 'users:profile' user_id=author.pk %}" class="link">{{ author.username }}</a></p>
+        <br>
+        <!--Отображение статуса стати для ее автора -->
+        {% if author == request.user %}
+            {% if post.is_published %}
+                <p style="color: green; font-weight: 600;">Опубликовано</p>
+            {% else %}
+                <p style="color: red; font-weight: 600;">Черновик</p>
+        {% endif %}
+        <!--Возможность редактирования и удаления статьи для ее автора -->
+        <button class="submit_btn" onclick="window.location.href = '{% url 'edit_post' pk=post.pk %}';">Редактировать пост</button>
+        <button class="submit_btn" onclick="window.location.href = '{% url 'delete_post' pk=post.pk %}';">Удалить пост</button>
+    {% endif %}
+
+    {% else %}
+        <p style="font-weight: 800;">Автор неизвестен</p>
+    {% endif %}
+
+{% endwith %}
+<!--<button class="submit_btn" >❤️ Убрать лайк | 🤍 Лайкнуть </button>-->
+<h3>Комментарии</h3>
+<!--Комментарии к посту-->
+
+<button class="submit_btn" onclick="window.location.href = '{% url 'add_comm' post_id=post.pk %}';">Добавить комментарий</button>
+<ul class="list-articles">
+    {% for comm in post.comments.all %}
+		<li>
+			<div class="article-panel">
+			    <p class="first">Автор: {{ comm.author | default:"неизвестен" }}</p>
+			    <p class="last">Дата: {{ comm.time_update | date:"d.m.Y H:i:s" }}</p>
+			</div>
+
+		<!--Заголовок статьи и первые 30 слов её содержания-->
+    		{% autoescape off %}
+				{{ comm.text | linebreaks }}
+    		{% endautoescape %}
+		</li>
+	{% endfor %}
+</ul>
 
 {% endblock %}

@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
+<br>
+<form action="" method="GET">
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <br>
+	<button type="submit" class="submit_btn">Найти</button>
+	<button class="submit_btn" ><a href="{% url 'search_post' %}" class="log_reg_link">Сбросить</a></button>
 
-<!--Отображение информации о каждой статье-->
+</form>
+
 <ul class="list-articles">
 	{% for p in posts %}
 		{% with p.author as author %}

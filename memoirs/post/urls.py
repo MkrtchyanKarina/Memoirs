@@ -14,4 +14,7 @@ urlpatterns = [
     path('delete-post/<int:pk>/', views.DeletePost.as_view(), name="delete_post"),
     path('users-posts/<int:user_id>/', views.UsersPostsList.as_view(), name='users_posts'),
 
+    path('add-comm/post/<int:post_id>/', views.AddComment.as_view(), name="add_comm"),
+    path('search/', views.SearchPost.as_view(), name="search_post")
+
 ]

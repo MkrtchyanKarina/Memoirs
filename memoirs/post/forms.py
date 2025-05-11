@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, TagPost, Post
+from .models import Category, TagPost, Post, Comment
 
 
 class AddPostForm(forms.ModelForm):
@@ -21,3 +21,16 @@ class AddPostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'class': 'form-input', 'rows': 5}),
         }
+
+
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+
+class SearchPostForm(forms.Form):
+    query = forms.CharField(label='Поиск', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    title = forms.CharField(label='Поиск по заголовку', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    content = forms.CharField(label='Поиск по тексту', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    author = forms.CharField(label='Поиск по автору', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))

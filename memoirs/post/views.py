@@ -1,15 +1,42 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from .forms import AddPostForm
+from django.views.generic.edit import FormMixin
+from .forms import AddPostForm, AddCommentForm, SearchPostForm
 from .models import Post, TagPost
 from .utils import DataMixin
 
+
+
+class SearchPost(DataMixin, FormMixin, ListView):
+    model = Post
+    form_class = SearchPostForm
+    template_name = 'post/search.html'
+    context_object_name = 'posts'
+    title = "Поиск по тексту"
+
+    def get_queryset(self):
+        queryset = Post.published.all()
+        query = self.request.GET.get("query", "").strip()
+        title = self.request.GET.get("title", "").strip()
+        content = self.request.GET.get("content", "").strip()
+        author = self.request.GET.get("author", "").strip()
+
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(author__username__icontains=query))
+        elif title or content or author:
+            queryset = queryset.filter(Q(title__icontains=title) & Q(content__icontains=content) & Q(author__username__icontains=author))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET or None)
+
+        return context
 
 
 class PostHome(DataMixin, ListView):
@@ -64,6 +91,23 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
         w = form.save(commit=False)
         w.author = self.request.user
         return super().form_valid(form)
+
+
+class AddComment(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddCommentForm
+    template_name = 'post/add_post.html'
+    title = 'Добавить комментарий'
+
+
+    def form_valid(self, form):
+        """ Функция сохранения формы после получения данных о текущем пользователе и посте """
+        f = form.save(commit=False)
+        f.author = self.request.user
+        f.post = Post.objects.get(pk=self.kwargs['post_id'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('post', kwargs={'post_id': self.kwargs['post_id']})
 
 
 class UpdatePost(LoginRequiredMixin, DataMixin, UpdateView):
