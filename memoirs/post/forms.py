@@ -27,3 +27,10 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text']
+
+
+class SearchPostForm(forms.Form):
+    query = forms.CharField(label='Поиск', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    title = forms.CharField(label='Поиск по заголовку', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    content = forms.CharField(label='Поиск по тексту', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    author = forms.CharField(label='Поиск по автору', max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))

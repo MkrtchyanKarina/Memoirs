@@ -1,15 +1,42 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from .forms import AddPostForm, AddCommentForm
+from django.views.generic.edit import FormMixin
+from .forms import AddPostForm, AddCommentForm, SearchPostForm
 from .models import Post, TagPost
 from .utils import DataMixin
 
+
+
+class SearchPost(DataMixin, FormMixin, ListView):
+    model = Post
+    form_class = SearchPostForm
+    template_name = 'post/search.html'
+    context_object_name = 'posts'
+    title = "Поиск по тексту"
+
+    def get_queryset(self):
+        queryset = Post.published.all()
+        query = self.request.GET.get("query", "").strip()
+        title = self.request.GET.get("title", "").strip()
+        content = self.request.GET.get("content", "").strip()
+        author = self.request.GET.get("author", "").strip()
+
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(author__username__icontains=query))
+        elif title or content or author:
+            queryset = queryset.filter(Q(title__icontains=title) & Q(content__icontains=content) & Q(author__username__icontains=author))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET or None)
+
+        return context
 
 
 class PostHome(DataMixin, ListView):

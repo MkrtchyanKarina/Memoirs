@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<form action="" method="GET">
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <br>
+	<button type="submit" class="submit_btn">Найти</button>
+	<button class="submit_btn" ><a href="{% url 'search_post' %}" class="log_reg_link">Сбросить</a></button>
+
+</form>
+
+<ul class="list-articles">
+	{% for p in posts %}
+		{% with p.author as author %}
+		<li>
+			<div class="article-panel">
+			<p class="first">Категория: {{ p.cat.name }}  |  Автор: {{ author.username|default:"неизвестен" }}</p>
+			<p class="last">Дата: {{ p.time_update | date:"d.m.Y H:i:s" }}</p>
+			</div>
+
+		<!--Отображение статуса статей в личном кабинете автора-->
+			{% if author == request.user %}
+				{% if p.is_published %}
+					<p style="color: green; font-weight: 600;">Опубликовано</p>
+				{% else %}
+					<p style="color: red; font-weight: 600;">Черновик</p>
+				{% endif %}
+			{% endif %}
+		{% endwith %}
+
+		<!--Выводим изображения, если они есть-->
+			{% if p.images %}
+			<p><img class="img-article-left thumb" src="{{ p.images.url }}"></p>
+			{% endif %}
+		<!--Заголовок статьи и первые 30 слов её содержания-->
+			<p style="font-weight: 800;">{{p.title}}</p>
+    		{% autoescape off %}
+				{{p.content | linebreaks | truncatewords:30}}
+    		{% endautoescape %}
+
+			<p class="link-read-post"><a class="link" href="{{ p.get_absolute_url }}">Читать пост</a></p>
+		</li>
+	{% endfor %}
+</ul>
+{% endblock %}
+
+<!-- Постраничная навигация -->
+{% block navigation %}
+{% if page_obj.has_other_pages %}
+<nav class="list-pages">
+	<ul>
+		{% if page_obj.has_previous %}
+		<li class="page-num">
+			<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+		</li>
+		{% endif %}
+
+		{% for p in paginator.page_range %}
+		{% if page_obj.number == p %}
+			<li class="page-num page-num-selected">{{ p }}</li>
+		{% elif p >= page_obj.number|add:-1 and p <= page_obj.number|add:1 %}
+			<li class="page-num">
+				<a href="?page={{ p }}">{{ p }}</a>
+			</li>
+		{% elif p == 1 or p == paginator.num_pages %}
+			<li class="page-num">
+				<a href="?page={{ p }}">{{ p }}</a>
+			</li>
+		{% endif %}
+		{% endfor %}
+
+		{% if page_obj.has_next %}
+		<li class="page-num">
+			<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
+{% endif %}
+{% endblock %}
