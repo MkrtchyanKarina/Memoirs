@@ -54,8 +54,6 @@ class UsersCommentsList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         usr_id = self.request.user.pk
-        for comm in get_object_or_404(self.model, pk=usr_id).comments.all():
-            print(comm.text)
         return get_object_or_404(self.model, pk=usr_id).comments.all()
 
 
