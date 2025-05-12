@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if comments %}
+<ul class="list-articles">
+    {% for comm in comments %}
+		<li>
+			<div class="article-panel">
+                <p class="first">Пост: {{ comm.post }}</p>
+			    <p class="last">Дата: {{ comm.time_update | date:"d.m.Y H:i:s" }}</p>
+			</div>
+
+
+    		{% autoescape off %}
+				{{ comm.text | linebreaks }}
+    		{% endautoescape %}
+		</li>
+	{% endfor %}
+</ul>
+{% else %}
+<p> Вы не написали ни одного комментария </p>
+{% endif %}
+{% endblock %}

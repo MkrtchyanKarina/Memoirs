@@ -33,6 +33,7 @@ class SearchPost(DataMixin, FormMixin, ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        # Сохранение информации для поиска в форме после выполнения запроса
         context = super().get_context_data(**kwargs)
         context['form'] = self.form_class(self.request.GET or None)
 
