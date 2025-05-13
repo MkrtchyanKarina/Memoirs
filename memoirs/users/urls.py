@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeDoneView
 from django.urls import path, reverse_lazy
 from . import views
 
@@ -16,6 +16,10 @@ urlpatterns = [
     path('edit/<int:user_id>/', views.EditUserInformation.as_view(), name='edit'),
     path('profile/<int:user_id>/', views.ShowPersonalInformation.as_view(), name='profile'),
     path('comments/', views.UsersCommentsList.as_view(), name='comments'),
+
+    # Изменение пароля в личном кабинете
+    path('password-change/', views.UserPasswordChange.as_view(), name="password_change"),
+    path('password-change-done', PasswordChangeDoneView.as_view(template_name='users/password_change_done.html'), name="password_change_done"),
 
     # Сброс пароля
     path('password-reset/', PasswordResetView.as_view(
