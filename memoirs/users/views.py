@@ -75,8 +75,8 @@ class ShowPersonalInformation(LoginRequiredMixin, DetailView):
         return reverse('users:profile', kwargs={'user_id': self.object.pk})
 
 
-class UserPasswordChange(PasswordChangeView):
-    form_class = UserPasswordChangeForm
-    success_url = reverse_lazy("users:password_change_done")
-    template_name = "users/password_change_form.html"
-    title = "Смена пароля"
+# class UserPasswordChange(PasswordChangeView):
+#     form_class = UserPasswordChangeForm
+#     success_url = reverse_lazy("users:password_change_done")
+#     template_name = "users/password_change_form.html"
+#     title = "Смена пароля"
