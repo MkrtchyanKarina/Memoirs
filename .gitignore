@@ -3,4 +3,4 @@
 /memoirs/post/migrations/
 /memoirs/users/migrations/
 /.idea/
-/.env
+/memoirs/.env
