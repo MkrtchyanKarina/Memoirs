@@ -44,6 +44,22 @@ class EditUserInformation(LoginRequiredMixin, UpdateView):
             return super().get(request, *args, **kwargs)
 
 
+class UsersCommentsList(LoginRequiredMixin, ListView):
+    """ Комментарии пользователя """
+    model = get_user_model()
+    pk_url_kwarg = "user_id"
+    template_name = "users/comments.html"
+    context_object_name = 'comments'
+    title = 'Комментарии пользователя'
+
+    def get_queryset(self):
+        usr_id = self.request.user.pk
+        return get_object_or_404(self.model, pk=usr_id).comments.all()
+
+
+
+
+
 
 
 class ShowPersonalInformation(LoginRequiredMixin, DetailView):

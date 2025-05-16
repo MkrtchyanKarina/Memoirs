@@ -129,7 +129,7 @@ class Comment(models.Model):
     time_update = models.DateTimeField(auto_now=True, verbose_name="время изменения")
 
     def __str__(self):
-        return self.author, self.text
+        return f'Author: {self.author} \n Text: {self.text} \n Post: {self.post} \n Data: {self.time_update}'
 
     class Meta:
         ordering = ['-time_create']
