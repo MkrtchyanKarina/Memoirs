@@ -10,6 +10,7 @@ from users.forms import LoginUserForm, RegisterUserForm, EditUserForm, UserPassw
 
 
 class LoginUser(LoginView):
+    """ Отображение формы для входа в аккаунт """
     template_name = 'users/login.html'
     form_class = LoginUserForm
     extra_context = {'title': 'Авторизация'}
@@ -17,6 +18,10 @@ class LoginUser(LoginView):
 
 
 class RegisterUser(CreateView):
+    """ Отображение страницы с формой для регистрации
+
+    :success_url: если пользователь зарегистрировался, то перенаправляем на страницу входа в аккаунт 'users:login'
+    """
     form_class = RegisterUserForm
     template_name = "users/register.html"
     extra_context = {'title': 'Регистрация'}
@@ -25,7 +30,7 @@ class RegisterUser(CreateView):
 
 
 class EditUserInformation(LoginRequiredMixin, UpdateView):
-    """ Обновление информации о пользователе """
+    """ Обновление информации о себе """
     model = get_user_model()
     form_class = EditUserForm
     pk_url_kwarg = "user_id"
@@ -36,6 +41,12 @@ class EditUserInformation(LoginRequiredMixin, UpdateView):
         return reverse('users:profile', kwargs={'user_id': self.object.pk})
 
     def get(self, request, *args, **kwargs):
+        """
+        Проверка прав пользователя
+
+        :user: запрашиваемый пользователь
+        :request.user: аутентифицированный пользователь
+        """
         user = self.get_object()
         if user.pk != request.user.pk:
             messages.error(request, "У вас нет прав на редактирование информации об этом пользователе!")
@@ -45,7 +56,7 @@ class EditUserInformation(LoginRequiredMixin, UpdateView):
 
 
 class UsersCommentsList(LoginRequiredMixin, ListView):
-    """ Комментарии пользователя """
+    """ Комментарии аутентифицированного пользователя """
     model = get_user_model()
     pk_url_kwarg = "user_id"
     template_name = "users/comments.html"
@@ -53,17 +64,15 @@ class UsersCommentsList(LoginRequiredMixin, ListView):
     title = 'Комментарии пользователя'
 
     def get_queryset(self):
+        """  Функция для получения списка комментариев аутентифицированного пользователя  """
         usr_id = self.request.user.pk
         return get_object_or_404(self.model, pk=usr_id).comments.all()
 
 
 
 
-
-
-
 class ShowPersonalInformation(LoginRequiredMixin, DetailView):
-    """ Информация о текущем пользователе """
+    """ Информация о запрашиваемом пользователе """
     model = get_user_model()
     pk_url_kwarg = "user_id"
     template_name = "users/profile.html"
@@ -76,6 +85,7 @@ class ShowPersonalInformation(LoginRequiredMixin, DetailView):
 
 
 class UserPasswordChange(PasswordChangeView):
+    """ Отображение формы для изменения пароля """
     form_class = UserPasswordChangeForm
     success_url = reverse_lazy("users:password_change_done")
     template_name = "users/password_change_form.html"
