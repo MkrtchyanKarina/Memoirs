@@ -11,33 +11,14 @@ from .models import Post, TagPost
 from .utils import DataMixin
 
 
+def about(request):
+    """
+    Информация о сайте
+    :param request: информация о текущем http-запросе
+    :return: страница about.html
+    """
+    return render(request, 'post/about.html', context={'title': 'О сайте'})
 
-class SearchPost(DataMixin, FormMixin, ListView):
-    model = Post
-    form_class = SearchPostForm
-    template_name = 'post/search.html'
-    context_object_name = 'posts'
-    title = "Поиск по тексту"
-
-    def get_queryset(self):
-        queryset = Post.published.all()
-        query = self.request.GET.get("query", "").strip()
-        title = self.request.GET.get("title", "").strip()
-        content = self.request.GET.get("content", "").strip()
-        author = self.request.GET.get("author", "").strip()
-
-        if query:
-            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(author__username__icontains=query))
-        elif title or content or author:
-            queryset = queryset.filter(Q(title__icontains=title) & Q(content__icontains=content) & Q(author__username__icontains=author))
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        # Сохранение информации для поиска в форме после выполнения запроса
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class(self.request.GET or None)
-
-        return context
 
 
 class PostHome(DataMixin, ListView):
@@ -66,15 +47,26 @@ class PostHome(DataMixin, ListView):
         return Post.published.all().select_related('cat')
 
 
+# Отображение, добавление, изменение, удаление постов
 
-def about(request):
-    """
-    Информация о сайте
-    :param request: информация о текущем http-запросе
-    :return: страница about.html
-    """
-    return render(request, 'post/about.html', context={'title': 'О сайте'})
 
+class ShowPost(DataMixin, DetailView):
+    """ Отображение поста """
+    template_name = 'post/post.html'
+    pk_url_kwarg = 'post_id'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=context['post'].title, cat_selected=context['post'].cat_id)
+
+
+    def get_object(self, queryset=None):
+        author = Post.objects.get(pk=self.kwargs['post_id']).author
+        if author is None or self.request.user.pk == author.pk:
+            return get_object_or_404(Post.objects, pk=self.kwargs['post_id'])
+        else:
+            return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
 
 
 class AddPost(LoginRequiredMixin, DataMixin, CreateView):
@@ -95,6 +87,7 @@ class AddPost(LoginRequiredMixin, DataMixin, CreateView):
 
 
 class AddComment(LoginRequiredMixin, DataMixin, CreateView):
+    """ Отображение формы для добавления комментария """
     form_class = AddCommentForm
     template_name = 'post/add_post.html'
     title = 'Добавить комментарий'
@@ -144,6 +137,10 @@ class DeletePost(LoginRequiredMixin, DataMixin, DeleteView):
             return super().get(request, *args, **kwargs)
 
 
+
+# Поиск и сортировка постов
+
+
 class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
     """ Статьи пользователя """
     model = Post
@@ -159,26 +156,6 @@ class UsersPostsList(LoginRequiredMixin, DataMixin, ListView):
             return Post.objects.filter(author=requested_usr_id)
         else:
             return Post.published.filter(author=requested_usr_id)
-
-
-
-class ShowPost(DataMixin, DetailView):
-    """ Отображение поста """
-    template_name = 'post/post.html'
-    pk_url_kwarg = 'post_id'
-    context_object_name = 'post'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=context['post'].title, cat_selected=context['post'].cat_id)
-
-
-    def get_object(self, queryset=None):
-        author = Post.objects.get(pk=self.kwargs['post_id']).author
-        if author is None or self.request.user.pk == author.pk:
-            return get_object_or_404(Post.objects, pk=self.kwargs['post_id'])
-        else:
-            return get_object_or_404(Post.published, pk=self.kwargs['post_id'])
 
 
 class PostCategory(DataMixin, ListView):
@@ -209,6 +186,35 @@ class TagPostList(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
         return self.get_mixin_context(context, title=f'Тег: {tag.tag}')
+
+
+class SearchPost(DataMixin, FormMixin, ListView):
+    """ Отображение списка постов, найденных по словам в названии/тексте/имени автора """
+    model = Post
+    form_class = SearchPostForm
+    template_name = 'post/search.html'
+    context_object_name = 'posts'
+    title = "Поиск по тексту"
+
+    def get_queryset(self):
+        queryset = Post.published.all()
+        query = self.request.GET.get("query", "").strip()
+        title = self.request.GET.get("title", "").strip()
+        content = self.request.GET.get("content", "").strip()
+        author = self.request.GET.get("author", "").strip()
+
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(author__username__icontains=query))
+        elif title or content or author:
+            queryset = queryset.filter(Q(title__icontains=title) & Q(content__icontains=content) & Q(author__username__icontains=author))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        # Сохранение информации для поиска в форме после выполнения запроса
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET or None)
+
+        return context
 
 
 

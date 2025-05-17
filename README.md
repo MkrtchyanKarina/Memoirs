@@ -14,16 +14,21 @@ This is a pet-project by the first-year student (ITMO University, Faculty of App
     ```
 2. *Set up your database in settings.py (if you are using something other than SQLite).*
 
-3. **Go to the project folder**
+3. **Create .env file in project folder (memoirs)**
+   ```
+    in .env file write your SECRET_KEY, EMAIL_HOST_USER and EMAIL_HOST_PASSWORD
+   ```
+
+4. **Go to the project folder**
     ```bash
       cd memoirs
     ```
-4. **Apply migrations**
+5. **Apply migrations**
     ```bash
     python manage.py makemigrations
     python manage.py migrate
     ```
-5. **Run server**
+6. **Run server**
     ```bash
     python manage.py runserver
     ```
